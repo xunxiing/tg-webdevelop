@@ -1,0 +1,66 @@
+{
+  "admin": {
+    "username": "admin",
+    "password_hash": "pbkdf2:sha256:1000000$4b1n0j7OsDBO2oYt$b298721b26108dd8c79010e464e7f0e62f4aaf0ef5fb992ad299857481279c71"
+  },
+  "789": {
+    "username": "789",
+    "password_hash": "pbkdf2:sha256:1000000$v2xMKAoOMv6RhH5D$4c64d627b51596f21ad06d1368ed5d50c5b9423cb15b7dc34949b0b092f40376"
+  },
+  "1": {
+    "username": "1",
+    "password_hash": "pbkdf2:sha256:1000000$KZ4xqbZBWC77dfai$214e024a812b1853e956789a03a93e32a1e968eb39109d64360f6ab65e5785a8"
+  },
+  "test": {
+    "username": "test",
+    "password_hash": "pbkdf2:sha256:1000000$jDwMj34EHehlzEDj$7e812c3122c706cc7e2366023fd227d5fdc06619f80ea9b565847b69904f6015"
+  },
+  "\u74dc\u8f91": {
+    "username": "\u74dc\u8f91",
+    "password_hash": "pbkdf2:sha256:1000000$gHFxaQyaGNgVXMUN$d00c3dad5026dcdfe939a670530b26bcf865d42ecb1726d98fa38c3da2edbb0a"
+  },
+  "chip\u521d\u7ea7": {
+    "username": "chip\u521d\u7ea7",
+    "password_hash": "pbkdf2:sha256:1000000$SdVUrB8BqDtf4iku$e74b17e273ea0b5cb787163c06c15d7af6ccf328d82d2282443455400067c479"
+  },
+  "plasma\u8461\u8404": {
+    "username": "plasma\u8461\u8404",
+    "password_hash": "pbkdf2:sha256:1000000$gkSayEGXgAWltjar$8c36ab83365b5e0dfb0318f4ec072cf71d855f24bd28a7f2649973edd1b153ba"
+  },
+  "admin123": {
+    "username": "admin123",
+    "password_hash": "pbkdf2:sha256:1000000$Jz3kF0GOqCu9q6So$e36deb03a48d33e223beb46e3bde23e854f6a1d968ff5f60d06a539ae6093a60"
+  },
+  "admin111": {
+    "username": "admin111",
+    "password_hash": "pbkdf2:sha256:1000000$x3WnrnysZeGQsFg7$1f2746b373ed0f276585c19690e8101cbb10585d4c9e7d37e7064ad44da84fb3"
+  },
+  "\u5df4\u5df4\u6258\u65af": {
+    "username": "\u5df4\u5df4\u6258\u65af",
+    "password_hash": "pbkdf2:sha256:1000000$uxEG6DIfYJ0qEeYO$ea1ed143c5ec41856cc080d45a00fa83324187f166df0277c48231c70e2481d4"
+  },
+  "114514": {
+    "username": "114514",
+    "password_hash": "pbkdf2:sha256:1000000$N6H7iIQTupJkBpV5$cde5e300f7427879e9c1435f34e16570de24222bee7ab96cbd4aa90e0b4c4412"
+  },
+  "bbtbff": {
+    "username": "bbtbff",
+    "password_hash": "pbkdf2:sha256:1000000$3ax99lVHAJSINGP9$73cbe402baa07cdfb35a0a256646d38cfc23fc2e6c6569b91a7ffda0b55fad45"
+  },
+  "\u52a0\u538b\u53cd\u5e94\u5ba4": {
+    "username": "\u52a0\u538b\u53cd\u5e94\u5ba4",
+    "password_hash": "pbkdf2:sha256:1000000$jiPmWtU7yS296VVp$db2e68556d92816718f7ec37cf692baaacba54b9a2ee62db7bf2d044579a890a"
+  },
+  "li": {
+    "username": "li",
+    "password_hash": "pbkdf2:sha256:1000000$GHyk9pLwoYhQQ1r1$48607f412c6cfc692d5c9aab886e455d27ebf30f19d8607f2da942e588887f20"
+  },
+  "123": {
+    "username": "123",
+    "password_hash": "pbkdf2:sha256:1000000$1B6sjgpaxTvMNFvP$95944847f7b5a0ddeab1e542fe966a9070cf9c3a0239e70e0b820bed2233dffc"
+  },
+  "1145": {
+    "username": "1145",
+    "password_hash": "pbkdf2:sha256:1000000$HAWQ6kqPWUjiF4lK$649e873c46c41d2e12b510199c1f1cf0a31fbee6d15970d3939af0c96099793a"
+  }
+}

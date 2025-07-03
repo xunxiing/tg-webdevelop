@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - AI芯片逻辑图生成器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="auth-page-background">
+    <div class="auth-page-container">
+        <header class="auth-header">
+            <span class="logo-auth">M</span> <h1>用户登录</h1>
+        </header>
+
+        <main class="auth-form-wrapper">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flash-messages-auth">
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+                <div class="form-group form-group-checkbox">
+                    <input type="checkbox" id="remember" name="remember" value="true">
+                    <label for="remember" class="checkbox-label">记住我</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="button-primary auth-submit-button">
+                        <span class="material-icons">login</span> 登 录
+                    </button>
+                </div>
+            </form>
+            <div class="extra-links-auth">
+                <p>还没有账户？ <a href="{{ url_for('register') }}">立即注册</a></p>
+                <p><a href="{{ url_for('home') }}">返回主页</a></p> <!-- ⭐ 修改点 -->
+            </div>
+        </main>
+
+        <footer class="auth-footer">
+             <p>© 2024-2025 <span class="org-name">甜瓜联合科技 (MSUT)</span></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}芯片生成记录{% endblock %}
+{% block page_title %}芯片生成记录 (手动 & AI填充后生成){% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>创建时间 (UTC)</th>
+                <th>IP地址</th>
+                <th>User Agent (部分)</th>
+                <th>JSON内容 (部分)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for creation in creations.items %}
+            <tr>
+                <td>{{ creation.id }}</td>
+                <td>{{ creation.username or '匿名' }}</td>
+                <td>{{ creation.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ creation.ip_address }}</td>
+                <td>{{ creation.user_agent[:50] if creation.user_agent else '' }}...</td>
+                <td>
+                    <pre class="json-preview">{{ creation.chip_json_str[:200] if creation.chip_json_str else '' }}...</pre>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">目前没有芯片生成记录。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- 分页导航 -->
+<div class="pagination">
+    {% if creations.has_prev %}
+        <a href="{{ url_for('admin.chip_creations_list', page=creations.prev_num) }}">« 上一页</a>
+    {% endif %}
+    <span>第 {{ creations.page }} 页 / 共 {{ creations.pages }} 页</span>
+    {% if creations.has_next %}
+        <a href="{{ url_for('admin.chip_creations_list', page=creations.next_num) }}">下一页 »</a>
+    {% endif %}
+</div>
+{% endblock %}

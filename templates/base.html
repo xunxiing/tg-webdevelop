@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI芯片逻辑图生成器{% endblock %} - MSUT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="page-{{ request.endpoint | replace('.', '-') }}">
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="nav-brand">
+                <span class="logo">M</span>
+                <span>MSUT Chip Tools</span>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">首页</a>
+                <a href="{{ url_for('generator') }}" class="{{ 'active' if request.endpoint == 'generator' else '' }}">芯片生成器</a>
+                <a href="{{ url_for('tutorial') }}" class="{{ 'active' if request.endpoint == 'tutorial' else '' }}">芯片教程</a>
+            </div>
+            <div class="user-status-nav">
+                {% if current_user.is_authenticated %}
+                    <span class="user-greeting">你好, <strong class="org-name">{{ current_user.username }}</strong></span>
+                    {% if current_user.username == 'admin' %}
+                         <a href="{{ url_for('admin.dashboard') }}" class="auth-link admin-link" title="管理面板"><span class="material-icons">admin_panel_settings</span></a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" class="auth-link">登出</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="auth-link">登录</a>
+                    <a href="{{ url_for('register') }}" class="auth-link register-link">注册</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content-wrapper">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages-container-global">
+                <ul class="flash-messages-global">
+                    {% for category, message in messages %}
+                        <li class="flash-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    {# ⭐ 确保这里是唯一的 scripts_extra 定义 ⭐ #}
+    {% block scripts_extra %}{% endblock %}
+
+</body>
+</html>

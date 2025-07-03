@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理面板{% endblock %} - MSUT芯片生成器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="admin-page-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>MSUT管理面板</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' else '' }}">仪表盘</a></li>
+                    <li><a href="{{ url_for('admin.chip_creations_list') }}" class="{{ 'active' if request.endpoint == 'admin.chip_creations_list' else '' }}">芯片生成记录</a></li>
+                    <li><a href="{{ url_for('admin.ai_requests_list') }}" class="{{ 'active' if request.endpoint == 'admin.ai_requests_list' else '' }}">AI请求记录</a></li>
+                    <li><hr></li>
+                    <li><a href="{{ url_for('index') }}" target="_blank">返回主站</a></li>
+                    <li><a href="{{ url_for('admin.admin_logout_route') }}">管理员登出</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="admin-main-content">
+            <header class="admin-content-header">
+                <h1>{% block page_title %}{% endblock %}</h1>
+            </header>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages-container" style="margin: 0 20px 20px 20px;">
+                        <ul class="flash-messages">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <section class="admin-content-area">
+                {% block content %}{% endblock %}
+            </section>
+        </main>
+    </div>
+    {% block scripts_extra %}{% endblock %}
+</body>
+</html>

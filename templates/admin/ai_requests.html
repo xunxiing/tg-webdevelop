@@ -1,0 +1,52 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}AI请求记录{% endblock %}
+{% block page_title %}AI请求记录{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>时间 (UTC)</th>
+                <th>描述 (部分)</th>
+                <th>成功?</th>
+                <th>错误信息 (如有)</th>
+                <th>生成JSON (部分)</th>
+                <th>原始AI响应 (部分)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in ai_logs.items %}
+            <tr>
+                <td>{{ log.id }}</td>
+                <td>{{ log.username }}</td>
+                <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td><pre class="description-preview">{{ log.description[:100] if log.description else '' }}...</pre></td>
+                <td>{{ '是' if log.succeeded else '否' }}</td>
+                <td><pre class="error-preview">{{ log.error_message[:100] if log.error_message else '-' }}</pre></td>
+                <td><pre class="json-preview">{{ log.generated_json_str[:150] if log.generated_json_str else '-' }}...</pre></td>
+                <td><pre class="raw-response-preview">{{ log.raw_ai_response[:150] if log.raw_ai_response else '-' }}...</pre></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">目前没有AI请求记录。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- 分页导航 -->
+<div class="pagination">
+    {% if ai_logs.has_prev %}
+        <a href="{{ url_for('admin.ai_requests_list', page=ai_logs.prev_num) }}">« 上一页</a>
+    {% endif %}
+    <span>第 {{ ai_logs.page }} 页 / 共 {{ ai_logs.pages }} 页</span>
+    {% if ai_logs.has_next %}
+        <a href="{{ url_for('admin.ai_requests_list', page=ai_logs.next_num) }}">下一页 »</a>
+    {% endif %}
+</div>
+{% endblock %}

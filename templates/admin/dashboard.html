@@ -1,0 +1,24 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}仪表盘{% endblock %}
+{% block page_title %}仪表盘统计{% endblock %}
+
+{% block content %}
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <h3>总芯片生成次数</h3>
+        <p>{{ total_chips }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>总AI请求次数</h3>
+        <p>{{ total_ai }}</p>
+    </div>
+    <div class="stat-card">
+        <h3>成功AI请求次数</h3>
+        <p>{{ successful_ai }}</p>
+    </div>
+    <!-- 可以添加更多统计卡片 -->
+</div>
+
+<p style="margin-top: 20px;">欢迎来到管理面板。请从左侧导航选择要查看的记录。</p>
+{% endblock %}

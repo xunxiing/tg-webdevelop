@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}AI芯片逻辑图生成器{% endblock %}
+
+{% block content %}
+<div class="generator-container">
+    <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+            <button class="menu-button-sidebar" id="sidebarMenuButton" aria-label="收起菜单">
+                <span class="material-icons">menu</span>
+            </button>
+            <span class="logo">M</span>
+            <button class="new-chat-button" id="newChatBtn" aria-label="新对话">
+                <span class="material-icons">add</span>
+                <span class="button-text">新对话</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li>
+                    <a href="#" id="apiSettingsLink" class="nav-item-button">
+                        <span class="material-icons">vpn_key</span>
+                        <span class="button-text">API Key 与模型</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="jsonEditorLink" class="nav-item-button">
+                        <span class="material-icons">code</span>
+                        <span class="button-text">手动JSON编辑</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="featuresLink" class="nav-item-button">
+                         <span class="material-icons">star_outline</span>
+                        <span class="button-text">功能介绍</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <nav class="sidebar-nav">
+                <ul>
+                     <li>
+                        <a href="https://github.com/MGPT233/ChipGPT" target="_blank" rel="noopener noreferrer" class="nav-item-button">
+                            <span class="material-icons">help_outline</span>
+                            <span class="button-text">帮助与反馈</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="main-app-content" id="mainAppContent">
+        <div class="sidebar-overlay" id="sidebarOverlay" style="display: none;"></div>
+        
+        <!-- The old header is removed as it's now in base.html -->
+        <header class="page-header generator-header">
+            <div class="header-content">
+                <button class="menu-button-main" id="mainMenuButton" aria-label="打开菜单">
+                    <span class="material-icons">menu</span>
+                </button>
+                <span class="header-title-app">AI 芯片逻辑图生成器</span>
+            </div>
+        </header>
+
+
+        <main class="chat-main-container" id="chatMainContainer">
+            <div id="chatMessages" class="chat-messages-area">
+                <div class="message bot-message">
+                    <div class="avatar bot-avatar"></div> <div class="text">
+                        <p>
+                        {% if current_user.is_authenticated %}
+                            您好, {{ current_user.username }}！请描述您的芯片逻辑，我将尝试生成相应的JSON并展示图表。
+                        {% else %}
+                            您好！请描述您的芯片逻辑。登录后可使用更多功能。
+                        {% endif %}
+                        </p>
+                        <p><small>通过左侧菜单访问高级工具 (API Key, 模型选择, JSON编辑器) 或开始新对话。(QQ群: 223577168)</small></p>
+                    </div>
+                </div>
+                <div id="aiLoadingIndicator" class="loading-indicator message bot-message" style="display: none;">
+                     <div class="avatar bot-avatar"></div>
+                     <div class="text">AI 正在思考... <span class="dot-flashing"></span></div>
+                </div>
+                <div id="aiErrorBox" class="error-message-box message bot-message" style="display: none;">
+                     <div class="avatar bot-avatar"></div>
+                     <div class="text"></div>
+                </div>
+                <section id="featuresSection" class="features-section" style="display:none;">
+                    <h2>本站功能与优势</h2>
+                    <div class="features-grid">
+                        <div class="feature-card"><h3>✨ 快速可视化</h3><p>只需粘贴您的芯片JSON定义，即可快速生成清晰、直观的逻辑图。</p></div>
+                        <div class="feature-card"><h3>💻 在线编辑与生成</h3><p>直接在浏览器中编辑JSON数据并实时查看生成的图表。</p></div>
+                        <div class="feature-card"><h3>🤖 AI 辅助生成</h3><p>通过自然语言描述，利用AI自动生成初步的JSON配置。</p></div>
+                        <div class="feature-card"><h3>🖼️ JPG导出</h3><p>一键将生成的逻辑图导出为高清晰度JPG图片。</p></div>
+                        <div class="feature-card"><h3>💡 <span class="org-name">MSUT</span> 出品</h3><p>我们致力于提供实用、有趣的工具，助力社区创造与分享。</p></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="chat-input-footer">
+            <div id="advancedToolsModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content advanced-tools-panel">
+                    <button class="modal-close-button" id="modalCloseButton" aria-label="关闭高级工具">×</button>
+                    <h4>高级工具</h4>
+                    <div class="tool-section" id="apiKeySectionModal" style="display:none;">
+                        <h5>API Key 与模型设置</h5>
+                        {% if current_user.is_authenticated %}
+                        <div class="api-key-section-inline">
+                            <label for="apiKeyInput">SiliconFlow API Key:</label>
+                            <div class="api-key-input-group-inline">
+                                <input type="password" id="apiKeyInput" placeholder="sk-..." value="{{ saved_api_key }}">
+                                <button id="saveApiKeyButton">保存Key</button>
+                            </div>
+                            <div id="apiKeyMessage" class="api-key-message"></div>
+                        </div>
+                        <div class="ai-model-selection">
+                            <label for="aiModelSelect">选择 AI 模型 (当前: <span id="currentSetModelDisplay">未设置</span>):</label>
+                            <div class="model-select-wrapper">
+                                <select id="aiModelSelect" name="ai_model">
+                                    <option value="">— 加载/选择模型 —</option>
+                                </select>
+                                <button id="refreshModelsBtn" class="icon-button" aria-label="刷新模型列表" title="刷新模型列表">
+                                    <span class="material-icons">refresh</span>
+                                </button>
+                            </div>
+                            <small id="modelLoadStatus"></small>
+                            <small>提示：选择模型后，后续AI对话将使用此模型。</small>
+                        </div>
+                        {% else %}
+                        <p class="auth-prompt">请 <a href="{{ url_for('login') }}">登录</a> 或 <a href="{{ url_for('register') }}">注册</a> 以使用此功能。</p>
+                        {% endif %}
+                    </div>
+                    <div class="tool-section" id="jsonEditorSectionModal" style="display:none;">
+                        <h5>手动JSON编辑器</h5>
+                        <div class="manual-json-editor-inline">
+                            <textarea id="chipJsonTextarea" placeholder="AI生成的JSON将显示在此处。">{{ default_json }}</textarea>
+                            <div class="form-actions-inline">
+                                <button id="generateDiagramButton">生成/更新图表</button>
+                                <button id="clearJsonButton" class="button-danger">清除JSON</button>
+                            </div>
+                            <div id="jsonErrorBoxManual" class="error-message-box-manual"></div>
+                            <div id="loadingIndicatorManual" class="loading-indicator-manual" style="display:none;">图表生成中... <span class="dot-flashing"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-wrapper">
+                <textarea id="userInput" placeholder="在此输入您的芯片逻辑描述..." rows="1"></textarea>
+                <div class="input-actions">
+                    <button id="sendButton" title="发送" aria-label="发送"><span class="material-icons">arrow_upward</span></button>
+                </div>
+            </div>
+            <div class="footer-info">
+                 <p>© 2024-2025 <span class="org-name">甜瓜联合科技 (MSUT)</span>. QQ群: 223577168</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="diagramResultContainerTemplate" class="diagram-output-file" style="display: none;">
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+<script id="serverAuthData" type="application/json" style="display:none;">
+    {"isAuthenticated": {{ current_user.is_authenticated | tojson }} }
+</script>
+<script type="module" src="{{ url_for('static', filename='main.js') }}" defer></script>
+{% endblock %}

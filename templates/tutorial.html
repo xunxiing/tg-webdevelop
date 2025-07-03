@@ -1,0 +1,2260 @@
+{# 告诉Flask，这个页面要使用 base.html 作为基础框架 #}
+{% extends "base.html" %}
+
+{# 这个 block 里的内容，会替换掉 base.html 中定义的 <title> #}
+{% block title %}芯片模块指南{% endblock %}
+
+{# 这个 block 里的内容，会添加到 base.html 的 <head> 区域，用于放置此页面专属的CSS #}
+{% block head_extra %}
+
+{% endblock %}
+
+
+{# 这个 block 里的内容，是页面的核心，它会被填充到 base.html 的主内容区域 #}
+{% block content %}
+    <div class="tutorial-content">
+        <h1>《甜瓜游乐场》芯片模块指南 (v27.5)</h1>
+<h2>前言</h2>
+<p>您好，创造者！</p>
+<p>欢迎阅读由 甜瓜联合科技 为您准备的《甜瓜游乐场》芯片模块指南。
+[cite_start]芯片是实现您创意的强大工具。这份指南汇集了我们对芯片系统的理解与经验，旨在帮助您快速掌握各类模块的功能与用法，在创造之路上少走弯路。我们甜瓜联合科技相信联合社区的力量能激发无限可能。这份指南不仅是我们的知识分享，更是希望促进玩家间的交流与互助，点燃集体智慧的火花。我们鼓励您探索、实践，并将您的奇思妙想分享给更多同好。 [cite: 1]</p>
+<p>[cite_start]为了方便大家交流讨论、分享作品、寻求帮助，欢迎加入我们的 <strong>QQ 交流群：223577168</strong>。让我们一起 联合 起来，共同探索芯片编程的乐趣！ [cite: 1]</p>
+<h2>目录 (此为动态生成内容的结构概览)</h2>
+<ol>
+<li>[cite_start]常量模块+输入输出 [cite: 1]</li>
+<li>[cite_start]变量模块 (Variables) [cite: 1]</li>
+<li>[cite_start]数值计算 (Numerical Calculation) [cite: 1]</li>
+<li>[cite_start]三角函数与角度 (Trigonometry &amp; Angles) [cite: 1]</li>
+<li>[cite_start]逻辑与比较 (Logic &amp; Comparison) [cite: 1]</li>
+<li>[cite_start]向量与颜色 (Vector &amp; Color) [cite: 1]</li>
+<li>[cite_start]位运算 (Bitwise Operations) [cite: 1]</li>
+<li>[cite_start]实体操作 (Entity Operations) [cite: 1]</li>
+<li>[cite_start]字符串操作 (String Operations) [cite: 1]</li>
+<li>[cite_start]输入/传感器 (Input/Sensors) [cite: 1]</li>
+<li>[cite_start]实用工具 (Utility) [cite: 1]</li>
+<li>[cite_start]其他重要信息 (Data Types, Entity Usage, Node Colors) [cite: 1]</li>
+<li>[cite_start]结语 [cite: 1]</li>
+</ol>
+<hr />
+<h2>1. 常量模块 (Constants)</h2>
+<p>[cite_start]输出固定的数值、文本或向量/颜色。 [cite: 1]</p>
+<h3>1.1. <code>Constant (Decimal)</code> (常量数值)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 输出一个固定的数值 (数字)。 [cite: 2]</li>
+<li>[cite_start]<strong>输入</strong>: 无 [cite: 2]</li>
+<li>[cite_start]<strong>输出</strong>: 一个固定的 DECIMAL 值。 [cite: 2]</li>
+<li>[cite_start]<strong>使用</strong>: 在模块的属性里直接填好想要的数字，然后从唯一的输出端口获取这个数字。 [cite: 2]</li>
+</ul>
+<h3>1.2. <code>Constant (String)</code> (常量字符串)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 输出一段固定的文本 (字符串)。 [cite: 3]</li>
+<li>[cite_start]<strong>输入</strong>: 无 [cite: 3]</li>
+<li>[cite_start]<strong>输出</strong>: 一个固定的 STRING 值。 [cite: 3]</li>
+<li>[cite_start]<strong>使用</strong>: 在模块的属性里输入想要的文字内容，然后从唯一的输出端口获取这段文字。 [cite: 3]</li>
+</ul>
+<h3>1.3. <code>Constant (Vector)</code> (常量向量/颜色)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 输出一个固定的四维向量 (X, Y, Z, W)。 [cite: 4]</li>
+<li>[cite_start]<strong>输入</strong>: 无 [cite: 4]</li>
+<li>[cite_start]<strong>输出</strong>: 一个固定的 VECTOR 值。 [cite: 4]</li>
+<li>[cite_start]<strong>使用</strong>: 在模块的属性里分别设置好 X, Y, Z, W 四个数值，然后从唯一的输出端口获取这个四维向量。它可以用来代表坐标、方向，或者颜色 (RGBA 分别对应 X,Y,Z,W)。 [cite: 4]</li>
+</ul>
+<h3>1.4. INPUT (输入参数)</h3>
+<ul>
+<li>[cite_start]<strong>核心功能</strong>: 定义芯片的一个输入参数，允许从芯片外部或芯片内部的其他模块连接一个值到此参数。一个重要特性是，这类输入参数的值通常可以在游戏世界中直接调整（例如，当选中挂载芯片的实体时，在属性面板或通过特定的UI交互），而无需打开芯片编辑界面，为实时调试和参数微调提供了极大便利。这个值可以在芯片逻辑中使用。图片中展示了多种 INPUT 模块，它们可以接收不同数据类型的值。 [cite: 4]</li>
+<li>[cite_start]<strong>输入端口</strong>: 无 (其值由外部设定、直接调整或连接)。 [cite: 4]</li>
+<li><strong>输出端口</strong>:<ul>
+<li>[cite_start]<code>OUTPUT (NULL)</code> (紫色): 输出一个 NULL 实体引用。 [cite: 4]</li>
+<li>[cite_start]<code>OUTPUT (0.00)</code> (蓝色): 输出一个数值 0.00。 [cite: 4]</li>
+<li>[cite_start]<code>OUTPUT (NULL)</code> (黄色): 输出一个 NULL 字符串。 [cite: 4]</li>
+<li>[cite_start]<code>OUTPUT (X:0 Y:0 Z:0 W:0)</code> (绿色): 输出一个零向量 (0,0,0,0)。 [cite: 4]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>参数设置</strong>: 每个 INPUT 模块可以在其属性中定义一个名称（例如 <code>#INPUT 1</code>），用于在芯片逻辑中识别和引用。同时，可以设置其数据类型（如图片所示，可以是实体、数值、字符串、向量）。 [cite: 4]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]在芯片编辑器中添加 <code>INPUT</code> 模块。 [cite: 4]</li>
+<li>[cite_start]根据需要，在模块属性中设置其名称和期望的数据类型。 [cite: 5]</li>
+<li>[cite_start]从该模块的输出端口引出连接，将其值传递给芯片中的其他模块。 [cite: 5]</li>
+<li>[cite_start]在游戏中使用芯片时，可以直接在游戏界面中（当选中实体并显示其可调参数时）为这些 INPUT 参数赋值，或通过芯片的属性面板设置。 [cite: 5]</li>
+</ol>
+</li>
+</ul>
+<h3>1.5. OUTPUT (输出端口)</h3>
+<ul>
+<li>[cite_start]<strong>核心功能</strong>: 定义芯片的一个输出端口，其核心作用是作为数据从 芯片内部 流向 芯片外部 的通道。芯片内部经过计算或处理得到的结果值，通过连接到此模块的输入端口，便可被芯片外部的其他系统、其他芯片或游戏逻辑读取和使用。它实现了芯片运算结果的对外“广播”或“暴露”。 [cite: 6]</li>
+<li><strong>输入端口 (连接芯片内部的值)</strong>:<ul>
+<li>[cite_start]<code>INPUT (NULL)</code> (紫色): 接收一个来自芯片内部逻辑的实体引用，以供外部读取。 [cite: 6]</li>
+<li>[cite_start]<code>INPUT (0.00)</code> (蓝色): 接收一个来自芯片内部逻辑的数值，以供外部读取。 [cite: 6]</li>
+<li>[cite_start]<code>INPUT (NULL)</code> (黄色): 接收一个来自芯片内部逻辑的字符串，以供外部读取。 [cite: 6]</li>
+<li>[cite_start]<code>INPUT (X:0 Y:0 Z:0 W:0)</code> (绿色): 接收一个来自芯片内部逻辑的向量，以供外部读取。 [cite: 6]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出端口 (面向芯片外部)</strong>: 此模块本身不产生新的数据输出到芯片内部的其他模块；它的“输出”是定义了一个可供芯片外部读取的数据点。 [cite: 6]</li>
+<li>[cite_start]<strong>参数设置</strong>: 每个 OUTPUT 模块可以在其属性中定义一个名称（例如 <code>#OUTPUT 0</code> 或自定义如 <code>CurrentSpeed</code>)，这个名称非常重要，因为它是在芯片外部（如通过脚本查询、在其他芯片中引用此芯片的输出，或在游戏编辑器的属性检查器中查看）识别和获取这个特定输出值的关键。 [cite: 6]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]在芯片编辑器中添加 OUTPUT 模块。 [cite: 6]</li>
+<li>[cite_start]在模块属性中为其设置一个清晰、有意义的名称，方便外部引用。 [cite: 6]</li>
+<li>[cite_start]将芯片内部逻辑中计算得到的、需要对外暴露的最终结果值（确保数据类型匹配）连接到该 OUTPUT 模块对应类型的输入端口。 [cite: 6]</li>
+<li>[cite_start]之后，在游戏环境的其他地方（例如，另一个芯片、一段代码，或者某些游戏对象的属性）就可以通过这个 OUTPUT 模块的名称来访问或读取该芯片传递出来的值。 [cite: 6]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2>2. 变量模块 (Variables)</h2>
+<p>[cite_start]存储和管理可变数据。 [cite: 9]</p>
+<h3>2.1. <code>VARIABLE</code></h3>
+<ul>
+<li>[cite_start]<strong>核心功能</strong>: 用于存储一个可变的数值、字符串、向量或实体，并持续输出该值。 [cite: 10]</li>
+<li><strong>输入端口</strong>:<ul>
+<li>[cite_start]<code>INPUT</code>: 要存储的值 (DECIMAL, STRING, VECTOR, ENTITY) [cite: 10]</li>
+<li>[cite_start]<code>SET</code>: 控制信号 (DECIMAL)。当 <code>SET</code> 为 1 时，更新存储的值；当 <code>SET</code> 为 0 时，保持不变。 [cite: 10]</li>
+</ul>
+</li>
+<li><strong>输出端口</strong>:<ul>
+<li>[cite_start]<code>VAR</code>: 当前存储的值 (DECIMAL, STRING, VECTOR, ENTITY) [cite: 10]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>共享变量</strong>： 多个 <code>VARIABLE</code> 模块可以指向同一个变量（例如，<code>#VARIABLE 1</code>），这意味着它们共享同一个存储空间。修改其中一个 <code>VARIABLE</code> 模块的值，会影响到其他指向同一个变量的 <code>VARIABLE</code> 模块。 [cite: 10]</li>
+<li>[cite_start]<strong>参数设置</strong>： 每个 <code>VARIABLE</code> 模块都有一个参数，用于指定要存储的变量名称（例如，<code>#VARIABLE 1</code>）。 [cite: 10]</li>
+<li><strong>特殊属性</strong>:<ul>
+<li>[cite_start]初始值： 创建时设置的默认值，一般为 0 或空。 [cite: 10]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]（设置参数指定变量名） [cite: 10]</li>
+<li>[cite_start]连接 <code>INPUT</code> 输入（要存储的值）。 [cite: 10]</li>
+<li>[cite_start]连接 <code>SET</code> 输入（控制更新）。 [cite: 10]</li>
+<li>[cite_start]<code>SET</code>=1：持续更新存储的值。 [cite: 10]</li>
+<li>[cite_start]<code>SET</code>=0：保持存储的值不变。 [cite: 11]</li>
+<li>[cite_start]从 <code>VAR</code> 输出读取当前存储的值。 [cite: 11]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2>3. 数值计算 (Numerical Calculation)</h2>
+<p>[cite_start]执行基础及高等数学运算。 [cite: 11]</p>
+<h3>3.1. <code>ADD</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个数值相加。 [cite: 12]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个加数 (DECIMAL)。 [cite: 12]</li>
+<li>[cite_start]B: 第二个加数 (DECIMAL)。 [cite: 12]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]https://www.google.com/search?q=A%2BB: A 和 B 的和 (DECIMAL)。 [cite: 12]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相加的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 12]</li>
+<li>[cite_start]从 <code>A+B</code> 输出读取和 (DECIMAL 类型)。 [cite: 12]</li>
+</ol>
+</li>
+</ul>
+<h3>3.2. <code>SUBTRACT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个数值相减。 [cite: 13]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 被减数 (DECIMAL)。 [cite: 13]</li>
+<li>[cite_start]B: 减数 (DECIMAL)。 [cite: 13]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A-B: A 和 B 的差 (DECIMAL)。 [cite: 13]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相减的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 13]</li>
+<li>[cite_start]从 <code>A-B</code> 输出读取差 (DECIMAL 类型)。 [cite: 13]</li>
+</ol>
+</li>
+</ul>
+<h3>3.3. <code>MULTIPLY</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个数值相乘。 [cite: 14]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个乘数 (DECIMAL)。 [cite: 14]</li>
+<li>[cite_start]B: 第二个乘数 (DECIMAL)。 [cite: 14]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A*B: A 和 B 的积 (DECIMAL)。 [cite: 14]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相乘的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 14]</li>
+<li>[cite_start]从 <code>A*B</code> 输出读取积 (DECIMAL 类型)。 [cite: 14]</li>
+</ol>
+</li>
+</ul>
+<h3>3.4. <code>DIVIDE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个数值相除。 [cite: 15]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 被除数 (DECIMAL)。 [cite: 15]</li>
+<li>[cite_start]B: 除数 (DECIMAL)。 [cite: 15]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A/B: A 和 B 的商 (DECIMAL)。 [cite: 15]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相除的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 15]</li>
+<li>[cite_start]从 <code>A/B</code> 输出读取商 (DECIMAL 类型)。 [cite: 15]</li>
+</ol>
+</li>
+</ul>
+<h3>3.5. <code>MODULO</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算两个数值相除的余数。 [cite: 16]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 被除数 (DECIMAL)。 [cite: 16]</li>
+<li>[cite_start]B: 除数 (DECIMAL)。 [cite: 16]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A%B: A 除以 B 的余数 (DECIMAL)。 [cite: 16]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算余数的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 16]</li>
+<li>[cite_start]从 <code>A%B</code> 输出读取余数 (DECIMAL 类型)。 [cite: 16]</li>
+</ol>
+</li>
+</ul>
+<h3>3.6. <code>POWER</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的幂。 [cite: 17]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 底数 (DECIMAL)。 [cite: 17]</li>
+<li>[cite_start]B: 指数 (DECIMAL)。 [cite: 17]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A^B: A 的 B 次方 (DECIMAL)。 [cite: 17]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将底数 (DECIMAL 类型) 连接到 <code>A</code> 输入，将指数 (DECIMAL 类型) 连接到 <code>B</code> 输入。 [cite: 17]</li>
+<li>[cite_start]从 <code>A^B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 17]</li>
+</ol>
+</li>
+</ul>
+<h3>3.7. <code>SQRT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的平方根。 [cite: 18]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 被开方数 (DECIMAL)。 [cite: 18]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]sqrt(A): A 的平方根 (DECIMAL)。 [cite: 18]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算平方根的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 18]</li>
+<li>[cite_start]从 <code>sqrt(A)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 18]</li>
+</ol>
+</li>
+</ul>
+<h3>3.8. <code>ABS</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的绝对值。 [cite: 19]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要求绝对值的数值 (DECIMAL)。 [cite: 19]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]abs(A): A 的绝对值 (DECIMAL)。 [cite: 19]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算绝对值的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 19]</li>
+<li>[cite_start]从 <code>abs(A)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 19]</li>
+</ol>
+</li>
+</ul>
+<h3>3.9. <code>ROUND</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个数值四舍五入到最接近的整数。 [cite: 20]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要四舍五入的数值 (DECIMAL)。 [cite: 20]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]round(A): A 四舍五入后的整数值 (DECIMAL)。 [cite: 20]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要四舍五入的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 20]</li>
+<li>[cite_start]从 <code>round(A)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 20]</li>
+</ol>
+</li>
+</ul>
+<h3>3.10. <code>FLOOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个数值向下取整到最接近的整数。 [cite: 21]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要向下取整的数值 (DECIMAL)。 [cite: 21]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]floor(A): A 向下取整后的整数值 (DECIMAL)。 [cite: 21]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要向下取整的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 21]</li>
+<li>[cite_start]从 <code>floor(A)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 21]</li>
+</ol>
+</li>
+</ul>
+<h3>3.11. <code>CEIL</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个数值向上取整到最接近的整数。 [cite: 22]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要向上取整的数值 (DECIMAL)。 [cite: 22]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]ceil(A): A 向上取整后的整数值 (DECIMAL)。 [cite: 22]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要向上取整的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 22]</li>
+<li>[cite_start]从 <code>ceil(A)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 22]</li>
+</ol>
+</li>
+</ul>
+<h3>3.12. <code>CLAMP (DECIMAL)</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将单个数值限制在指定的范围内。 [cite: 23]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>INPUT</code> / <code>A</code>: 你想要限制的数值 (DECIMAL)。 [cite: 23]</li>
+<li>[cite_start]Min: 允许的最小值 (DECIMAL)。 [cite: 23]</li>
+<li>[cite_start]Max: 允许的最大值 (DECIMAL)。 [cite: 23]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]clamp(A, Min, Max) / <code>RESULT</code>: 经过限制后的数值 (DECIMAL)。 如果输入值低于 Min，则输出将为 Min。 如果输入值高于 Max，则输出将为 Max。 否则，输出将与输入相同。 [cite: 23]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要限制的数值 (DECIMAL 类型) 连接到 <code>INPUT</code>/<code>A</code> 输入，将最小值 (DECIMAL 类型) 连接到 <code>Min</code> 输入，将最大值 (DECIMAL 类型) 连接到 <code>Max</code> 输入。 [cite: 23]</li>
+<li>[cite_start]从输出端口读取结果 (DECIMAL 类型)。 [cite: 23]</li>
+</ol>
+</li>
+</ul>
+<h3>3.13. <code>AVERAGE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算两个数值的平均值。 [cite: 24]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 24]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 24]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li><a href="https://www.google.com/search?q=A%2BB">cite_start</a>/2: A 和 B 的平均值 (DECIMAL)。 [cite: 24]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算平均值的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 24]</li>
+<li>[cite_start]从 <code>(A+B)/2</code> 输出读取平均值 (DECIMAL 类型)。 [cite: 24]</li>
+</ol>
+</li>
+</ul>
+<h3>3.14. <code>MIN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 返回两个数值中较小的值。 [cite: 25]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 25]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 25]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]min(A, B): A 和 B 中较小的值 (DECIMAL)。 [cite: 25]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 25]</li>
+<li>[cite_start]从 <code>min(A, B)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 25]</li>
+</ol>
+</li>
+</ul>
+<h3>3.15. <code>MAX</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 返回两个数值中较大的值。 [cite: 26]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 26]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 26]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]max(A, B): A 和 B 中较大的值 (DECIMAL)。 [cite: 26]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 26]</li>
+<li>[cite_start]从 <code>max(A, B)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 26]</li>
+</ol>
+</li>
+</ul>
+<h3>3.16. <code>SQUARE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的平方。 [cite: 27]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要计算平方的数值 (DECIMAL)。 [cite: 27]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A*A: A 的平方 (DECIMAL)。 [cite: 27]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算平方的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 27]</li>
+<li>[cite_start]从 <code>A*A</code> 输出读取结果 (DECIMAL 类型)。 [cite: 27]</li>
+</ol>
+</li>
+</ul>
+<h3>3.17. <code>Inverse</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算输入数值的倒数 (1 / Input)。 [cite: 28]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]输入值 / <code>A</code>: 需要计算倒数的数值 (DECIMAL)。 [cite: 28]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]倒数 / <code>1/A</code>: 输入值的倒数 (DECIMAL)。注意：输入为 0 时结果未定义或为无穷大。 [cite: 28]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算倒数的数值 (DECIMAL 类型) 连接到 <code>输入值</code>/<code>A</code> 端口。 [cite: 28]</li>
+<li>[cite_start]从 <code>倒数</code>/<code>1/A</code> 端口读取计算得到的倒数值 (DECIMAL 类型)。 [cite: 28]</li>
+</ol>
+</li>
+</ul>
+<h3>3.18. <code>SIGN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值的符号。 [cite: 29]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要判断符号的数值 (DECIMAL)。 [cite: 29]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]sign(A): A 的符号 (DECIMAL)。如果 A \&lt; 0，输出 -1；如果 A = 0，输出 0；如果 A &gt; 0，输出 1。 [cite: 29]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要判断符号的数值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 29]</li>
+<li>[cite_start]从输出端口读取结果 (DECIMAL 类型)。 [cite: 29]</li>
+</ol>
+</li>
+</ul>
+<h3>3.19. <code>Clamp01</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将输入的数值限制（钳位）在 0 到 1 的闭区间范围内。 [cite: 30]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>输入值</code>: 需要被限制的原始数值 (DECIMAL)。 [cite: 30]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>结果</code>: 经过限制处理后的数值，其值总是在 0 和 1 之间（包含 0 和 1）(DECIMAL)。 [cite: 30]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要限制范围的数值 (DECIMAL 类型) 连接到 <code>输入值</code> 端口。 [cite: 30]</li>
+<li>[cite_start]从 <code>结果</code> 端口读取被限制在 [0, 1] 区间内的值 (DECIMAL 类型)。 [cite: 30]</li>
+</ol>
+</li>
+</ul>
+<h3>3.20. <code>Exp</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算自然常数 e 的输入数值次幂 (e^Input)。 [cite: 31]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>指数</code>: 作为幂指数的数值 (DECIMAL)。 [cite: 31]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>结果</code>: e 的 <code>指数</code> 次方计算结果 (DECIMAL)。 [cite: 31]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算 e 次幂的指数值 (DECIMAL 类型) 连接到 <code>指数</code> 端口。 [cite: 31]</li>
+<li>[cite_start]从 <code>结果</code> 端口读取计算得到的 e 次幂值 (DECIMAL 类型)。 [cite: 31]</li>
+</ol>
+</li>
+</ul>
+<h3>3.21. <code>LOGARITHM</code> (对数)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算以指定底数为底的对数值。 [cite: 32]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>VALUE</code> (蓝色): 要求对数的真数 (DECIMAL)。 [cite: 32]</li>
+<li>[cite_start]<code>BASE</code> (蓝色): 对数的底数 (DECIMAL)。 [cite: 32]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT</code> (蓝色): <code>VALUE</code> 以 <code>BASE</code> 为底的对数值 (DECIMAL)。 [cite: 32]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要求对数的真数值 (DECIMAL 类型) 连接到 <code>VALUE</code> 输入。 [cite: 32]</li>
+<li>[cite_start]将对数的底数值 (DECIMAL 类型) 连接到 <code>BASE</code> 输入。 [cite: 32]</li>
+<li>[cite_start]从 <code>RESULT</code> 输出读取计算结果 (DECIMAL 类型)。 [cite: 32]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2>4. 三角函数与角度 (Trigonometry &amp; Angles)</h2>
+<p>[cite_start]处理角度和三角关系。 [cite: 32]</p>
+<h3>4.1. <code>SIN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个角度的正弦值。 [cite: 33]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Angle: 要计算正弦值的角度 (DECIMAL，弧度)。 [cite: 33]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]sin(Angle): Angle 的正弦值 (DECIMAL)。 [cite: 33]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算正弦值的角度 (DECIMAL 类型，以弧度为单位) 连接到 <code>Angle</code> 输入。 [cite: 33]</li>
+<li>[cite_start]从 <code>sin(Angle)</code> 输出读取正弦值 (DECIMAL 类型)。 [cite: 33]</li>
+</ol>
+</li>
+</ul>
+<h3>4.2. <code>COS</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个角度的余弦值。 [cite: 34]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Angle: 要计算余弦值的角度 (DECIMAL，弧度)。 [cite: 34]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]cos(Angle): Angle 的余弦值 (DECIMAL)。 [cite: 34]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算余弦值的角度 (DECIMAL 类型，以弧度为单位) 连接到 <code>Angle</code> 输入。 [cite: 34]</li>
+<li>[cite_start]从 <code>cos(Angle)</code> 输出读取余弦值 (DECIMAL 类型)。 [cite: 34]</li>
+</ol>
+</li>
+</ul>
+<h3>4.3. <code>TAN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个角度的正切值。 [cite: 35]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Angle: 要计算正切值的角度 (DECIMAL，弧度)。 [cite: 35]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]tan(Angle): Angle 的正切值 (DECIMAL)。 [cite: 35]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算正切值的角度 (DECIMAL 类型，以弧度为单位) 连接到 <code>Angle</code> 输入。 [cite: 35]</li>
+<li>[cite_start]从 <code>tan(Angle)</code> 输出读取正切值 (DECIMAL 类型)。 [cite: 35]</li>
+</ol>
+</li>
+</ul>
+<h3>4.4. <code>ASIN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的反正弦值（反正弦函数）。 [cite: 36]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Value: 要计算反正弦值的数值 (DECIMAL，范围通常在 -1 到 1 之间)。 [cite: 36]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]asin(Value): Value 的反正弦值 (DECIMAL，弧度)。 [cite: 36]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算反正弦值的数值 (DECIMAL 类型，范围通常在 -1 到 1 之间) 连接到 <code>Value</code> 输入。 [cite: 36]</li>
+<li>[cite_start]从 <code>asin(Value)</code> 输出读取反正弦值 (DECIMAL 类型，以弧度为单位)。 [cite: 36]</li>
+</ol>
+</li>
+</ul>
+<h3>4.5. <code>ACOS</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的反余弦值（反余弦函数）。 [cite: 37]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Value: 要计算反余弦值的数值 (DECIMAL，范围通常在 -1 到 1 之间)。 [cite: 37]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]acos(Value): Value 的反余弦值 (DECIMAL，弧度)。 [cite: 37]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算反余弦值的数值 (DECIMAL 类型，范围通常在 -1 到 1 之间) 连接到 <code>Value</code> 输入。 [cite: 37]</li>
+<li>[cite_start]从 <code>acos(Value)</code> 输出读取反余弦值 (DECIMAL 类型，以弧度为单位)。 [cite: 37]</li>
+</ol>
+</li>
+</ul>
+<h3>4.6. <code>ATAN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算一个数值的反正切值（反正切函数）。 [cite: 38]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Value: 要计算反正切值的数值 (DECIMAL)。 [cite: 38]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]atan(Value): Value 的反正切值 (DECIMAL，弧度)。 [cite: 38]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算反正切值的数值 (DECIMAL 类型) 连接到 <code>Value</code> 输入。 [cite: 38]</li>
+<li>[cite_start]从 <code>atan(Value)</code> 输出读取反正切值 (DECIMAL 类型，以弧度为单位)。 [cite: 38]</li>
+</ol>
+</li>
+</ul>
+<h3>4.7. <code>RAD to DEG</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将角度从弧度转换为度数。 [cite: 39]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]RAD: 要转换的角度值 (DECIMAL，弧度)。 [cite: 39]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]DEG: 转换后的角度值 (DECIMAL，度数)。 [cite: 39]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要转换的角度值 (DECIMAL 类型，以弧度为单位) 连接到 <code>RAD</code> 输入。 [cite: 39]</li>
+<li>[cite_start]从 <code>DEG</code> 输出读取转换后的角度值 (DECIMAL 类型，以度数为单位)。 [cite: 39]</li>
+</ol>
+</li>
+</ul>
+<h3>4.8. <code>LERP (角度插值)</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 在两个角度之间进行线性插值。 [cite: 40]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 起始角度 (DECIMAL)。 [cite: 40]</li>
+<li>[cite_start]B: 结束角度 (DECIMAL)。 [cite: 40]</li>
+<li>[cite_start]T: 插值系数 (DECIMAL)，范围通常在 0 到 1 之间。 [cite: 40]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A + (B - A) * T: A 和 B 之间的插值结果 (DECIMAL)。 [cite: 40]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将起始角度 (DECIMAL 类型) 连接到 <code>A</code> 输入，将结束角度 (DECIMAL 类型) 连接到 <code>B</code> 输入，将插值系数 (DECIMAL 类型) 连接到 <code>T</code> 输入。 [cite: 40]</li>
+<li>[cite_start]从 <code>A + (B - A) * T</code> 输出读取插值结果 (DECIMAL 类型)。 [cite: 40]</li>
+</ol>
+</li>
+</ul>
+<h3>4.9. <code>DeltaAngle</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算两个角度之间的最短角度差（处理 360 度回绕）。例如，350 度和 10 度之间的差是 20 度。 [cite: 41]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>角度A</code>: 第一个角度值（单位：度）(DECIMAL)。 [cite: 41]</li>
+<li>[cite_start]<code>角度B</code>: 第二个角度值（单位：度）(DECIMAL)。 [cite: 41]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>角度差</code>: 两个角度之间的最短差值（单位：度），结果通常在 [-180, 180] 区间内 (DECIMAL)。 [cite: 41]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个角度值 (DECIMAL 类型，度数) 连接到 <code>角度A</code> 和 <code>角度B</code> 输入。 [cite: 41]</li>
+<li>[cite_start]从 <code>角度差</code> 端口读取它们之间的最短角度差 (DECIMAL 类型，度数)。 [cite: 41]</li>
+</ol>
+</li>
+</ul>
+<h3>4.10. <code>CosineFormulaSide</code> (余弦定理求边长)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 使用余弦定理，根据三角形的两条边长和它们之间的夹角计算第三条边的长度。 [cite: 42]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>边长A</code>: 三角形的一条边长 (DECIMAL)。 [cite: 42]</li>
+<li>[cite_start]<code>边长B</code>: 三角形的另一条边长 (DECIMAL)。 [cite: 42]</li>
+<li>[cite_start]<code>夹角C</code>: 边长 A 和 B 之间的夹角（单位：度） (DECIMAL)。 [cite: 42]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>边长C</code>: 计算得到的第三条边的长度 (DECIMAL)。 [cite: 42]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将已知两条边长 (DECIMAL 类型) 连接到 <code>边长A</code> 和 <code>边长B</code> 输入。 [cite: 42]</li>
+<li>[cite_start]将这两条边之间的夹角（DECIMAL 类型，度数）连接到 <code>夹角C</code> 输入。 [cite: 42]</li>
+<li>[cite_start]从 <code>边长C</code> 端口读取计算出的第三边长度 (DECIMAL 类型)。 [cite: 42]</li>
+</ol>
+</li>
+</ul>
+<h3>4.11. <code>CosineFormulaAngle</code> (余弦定理求角度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 使用余弦定理，根据三角形的三条边长计算其中一个角的大小。 [cite: 43]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>边长A</code>: 三角形的一条边长 (DECIMAL)。 [cite: 43]</li>
+<li>[cite_start]<code>边长B</code>: 三角形的另一条边长 (DECIMAL)。 [cite: 43]</li>
+<li>[cite_start]<code>边长C</code>: 需要求其对角的第三条边长 (DECIMAL)。 [cite: 43]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>角度C</code>: 计算得到的边长 C 所对的角的大小（单位：度） (DECIMAL)。 [cite: 43]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将三角形的三条边长 (DECIMAL 类型) 连接到 <code>边长A</code>, <code>边长B</code>, <code>边长C</code> 输入（注意 <code>边长C</code> 是要求其对角的边）。 [cite: 43]</li>
+<li>[cite_start]从 <code>角度C</code> 端口读取计算出的角度值 (DECIMAL 类型，度数)。 [cite: 43]</li>
+</ol>
+</li>
+</ul>
+<h3>4.12. <code>PythagoreanCathetus</code> (勾股定理求直角边)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 使用勾股定理，在直角三角形中根据斜边和一条直角边计算另一条直角边的长度。 [cite: 44]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>斜边</code>: 直角三角形的斜边长度 (DECIMAL)。 [cite: 44]</li>
+<li>[cite_start]<code>直角边A</code>: 已知的一条直角边长度 (DECIMAL)。 [cite: 44]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>直角边B</code>: 计算得到的另一条直角边长度 (DECIMAL)。 [cite: 44]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将斜边长度 (DECIMAL 类型) 连接到 <code>斜边</code> 输入。 [cite: 44]</li>
+<li>[cite_start]将已知的一条直角边长度 (DECIMAL 类型) 连接到 <code>直角边A</code> 输入。 [cite: 44]</li>
+<li>[cite_start]从 <code>直角边B</code> 端口读取计算出的另一条直角边长度 (DECIMAL 类型)。 [cite: 44]</li>
+</ol>
+</li>
+</ul>
+<h3>4.13. <code>PythagoreanSide</code> (勾股定理求斜边)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 使用勾股定理，在直角三角形中根据两条直角边计算斜边的长度。 [cite: 45]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>直角边A</code>: 一条直角边长度 (DECIMAL)。 [cite: 45]</li>
+<li>[cite_start]<code>直角边B</code>: 另一条直角边长度 (DECIMAL)。 [cite: 45]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>斜边</code>: 计算得到的斜边长度 (DECIMAL)。 [cite: 45]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将两条直角边的长度 (DECIMAL 类型) 连接到 <code>直角边A</code> 和 <code>直角边B</code> 输入。 [cite: 45]</li>
+<li>[cite_start]从 <code>斜边</code> 端口读取计算出的斜边长度 (DECIMAL 类型)。 [cite: 45]</li>
+</ol>
+</li>
+</ul>
+<h2>5. 逻辑与比较 (Logic &amp; Comparison)</h2>
+<p>[cite_start]执行布尔逻辑和数值比较。(注意：已移除原文本中的重复逻辑门描述) [cite: 45]</p>
+<h3>5.1. <code>AND</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“与”运算。 [cite: 46]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 46]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 46]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A AND B: A 和 B 的逻辑“与”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 都为 true 时，结果为 true，否则为 false。 [cite: 46]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“与”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 46]</li>
+<li>[cite_start]从 <code>A AND B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 46]</li>
+</ol>
+</li>
+</ul>
+<h3>5.2. <code>OR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“或”运算。 [cite: 47]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 47]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 47]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A OR B: A 和 B 的逻辑“或”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 至少有一个为 true 时，结果为 true，否则为 false。 [cite: 47]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“或”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 47]</li>
+<li>[cite_start]从 <code>A OR B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 47]</li>
+</ol>
+</li>
+</ul>
+<h3>5.3. <code>XOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“异或”运算。 [cite: 48]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 48]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 48]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A XOR B: A 和 B 的逻辑“异或”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 的值不同时，结果为 true，否则为 false。 [cite: 48]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“异或”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 48]</li>
+<li>[cite_start]从 <code>A XOR B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 48]</li>
+</ol>
+</li>
+</ul>
+<h3>5.4. <code>NOT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“非”运算。 [cite: 49]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 要取反的布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 49]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]NOT A: A 的逻辑“非”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 为 true 时，结果为 false；当 A 为 false 时，结果为 true。 [cite: 49]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“非”运算的布尔值 (DECIMAL 类型) 连接到 <code>A</code> 输入。 [cite: 49]</li>
+<li>[cite_start]从 <code>NOT A</code> 输出读取结果 (DECIMAL 类型)。 [cite: 49]</li>
+</ol>
+</li>
+</ul>
+<h3>5.5. <code>NAND</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“与非”运算。 [cite: 50]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 50]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 50]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]NOT (A AND B): A 和 B 的逻辑“与非”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 都为 true 时，结果为 false，否则为 true。 [cite: 50]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“与非”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 50]</li>
+<li>[cite_start]从 <code>NOT (A AND B)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 50]</li>
+</ol>
+</li>
+</ul>
+<h3>5.6. <code>NOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“或非”运算。 [cite: 51]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 51]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 51]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]NOT (A OR B): A 和 B 的逻辑“或非”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 都为 false 时，结果为 true，否则为 false。 [cite: 51]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“或非”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 51]</li>
+<li>[cite_start]从 <code>NOT (A OR B)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 51]</li>
+</ol>
+</li>
+</ul>
+<h3>5.7. <code>NXOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 执行逻辑“同或”运算。 [cite: 52]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 52]</li>
+<li>[cite_start]B: 第二个布尔值 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 52]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]NOT (A XOR B): A 和 B 的逻辑“同或”结果 (DECIMAL，1 代表 true，0 代表 false)。当 A 和 B 的值相同时，结果为 true，否则为 false。 [cite: 52]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行逻辑“同或”运算的两个布尔值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 52]</li>
+<li>[cite_start]从 <code>NOT (A XOR B)</code> 输出读取结果 (DECIMAL 类型)。 [cite: 52]</li>
+</ol>
+</li>
+</ul>
+<h3>5.8. <code>GREATER THAN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否大于另一个数值。 [cite: 53]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 53]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 53]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A &gt; B: 如果 A 大于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 53]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 53]</li>
+<li>[cite_start]从 <code>A &gt; B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 53]</li>
+</ol>
+</li>
+</ul>
+<h3>5.9. <code>LESS THAN</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否小于另一个数值。 [cite: 54]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 54]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 54]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A \&lt; B: 如果 A 小于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 54]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 54]</li>
+<li>[cite_start]从 <code>A &lt; B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 54]</li>
+</ol>
+</li>
+</ul>
+<h3>5.10. <code>EQUAL</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断两个数值是否相等。 [cite: 55]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 55]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 55]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A == B: 如果 A 等于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 55]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 55]</li>
+<li>[cite_start]从 <code>A == B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 55]</li>
+</ol>
+</li>
+</ul>
+<h3>5.11. <code>NOT EQUAL</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断两个数值是否不相等。 [cite: 56]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 56]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 56]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A != B: 如果 A 不等于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 56]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 56]</li>
+<li>[cite_start]从 <code>A != B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 56]</li>
+</ol>
+</li>
+</ul>
+<h3>5.12. <code>GREATER OR EQUAL</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否大于或等于另一个数值。 [cite: 57]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 57]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 57]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A &gt;= B: 如果 A 大于或等于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 57]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 57]</li>
+<li>[cite_start]从 <code>A &gt;= B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 57]</li>
+</ol>
+</li>
+</ul>
+<h3>5.13. <code>LESS OR EQUAL</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否小于或等于另一个数值。 [cite: 58]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个数值 (DECIMAL)。 [cite: 58]</li>
+<li>[cite_start]B: 第二个数值 (DECIMAL)。 [cite: 58]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A \&lt;= B: 如果 A 小于或等于 B，则为 true (1)，否则为 false (0) (DECIMAL)。 [cite: 58]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要比较的两个数值 (DECIMAL 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 58]</li>
+<li>[cite_start]从 <code>A &lt;= B</code> 输出读取结果 (DECIMAL 类型)。 [cite: 58]</li>
+</ol>
+</li>
+</ul>
+<h3>5.14. <code>branch</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 根据条件选择输出不同的值 (仅限 DECIMAL)。 [cite: 59]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Condition: 条件 (DECIMAL，0 代表 false，非 0 代表 true)。 [cite: 59]</li>
+<li>[cite_start]A: 如果条件为 true，则输出此值 (DECIMAL)。 [cite: 59]</li>
+<li>[cite_start]B: 如果条件为 false，则输出此值 (DECIMAL)。 [cite: 59]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]根据条件选择输出的值 (DECIMAL)。 [cite: 59]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将条件 (DECIMAL 类型) 连接到 <code>Condition</code> 输入，将条件为 true 时输出的值 (DECIMAL 类型) 连接到 <code>A</code> 输入，将条件为 false 时输出的值 (DECIMAL 类型) 连接到 <code>B</code> 输入。 [cite: 59]</li>
+<li>[cite_start]从输出端口读取结果 (DECIMAL 类型)。 [cite: 59]</li>
+</ol>
+</li>
+</ul>
+<h3>5.15. <code>branch</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 根据条件选择输出不同的值 (支持任意类型)。 [cite: 60]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Condition: 条件 (DECIMAL, 0 代表 false, 非 0 代表 true)。 [cite: 60]</li>
+<li>[cite_start]A: 如果条件为 true，则输出此值 (任意类型)。 [cite: 60]</li>
+<li>[cite_start]B: 如果条件为 false，则输出此值 (任意类型)。 [cite: 60]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]根据条件选择输出的值 (类型与 <code>A</code> 和 <code>B</code> 相同)。 [cite: 60]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将条件 (DECIMAL 类型) 连接到 <code>Condition</code> 输入，将条件为 true 时输出的值 (任意类型) 连接到 <code>A</code> 输入，将条件为 false 时输出的值 (任意类型) 连接到 <code>B</code> 输入。 [cite: 60]</li>
+<li>[cite_start]从输出端口读取结果 (类型与 <code>A</code> 和 <code>B</code> 相同)。 [cite: 60]</li>
+</ol>
+</li>
+</ul>
+<h3>5.16. <code>Is InRangeExclusive</code> (开区间范围判断)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否严格位于指定的最小值和最大值之间（不包含边界）。 [cite: 61]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>数值</code>: 需要判断的数值 (DECIMAL)。 [cite: 61]</li>
+<li>[cite_start]<code>最小值</code>: 范围的下限（不包含） (DECIMAL)。 [cite: 61]</li>
+<li>[cite_start]<code>最大值</code>: 范围的上限（不包含） (DECIMAL)。 [cite: 61]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>结果</code>: 如果 <code>最小值</code> \&lt; <code>数值</code> \&lt; <code>最大值</code>，则输出 1 (true)，否则输出 0 (false) (DECIMAL)。 [cite: 61]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要判断的数值连接到 <code>数值</code> 输入。 [cite: 61]</li>
+<li>[cite_start]将范围的最小值连接到 <code>最小值</code> 输入，最大值连接到 <code>最大值</code> 输入。 [cite: 61]</li>
+<li>[cite_start]从 <code>结果</code> 端口读取判断结果 (DECIMAL 类型，1 或 0)。 [cite: 61]</li>
+</ol>
+</li>
+</ul>
+<h3>5.17. <code>Is InRangeInclusive</code> (闭区间范围判断)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 判断一个数值是否位于指定的最小值和最大值之间（包含边界）。 [cite: 62]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>数值</code>: 需要判断的数值 (DECIMAL)。 [cite: 62]</li>
+<li>[cite_start]<code>最小值</code>: 范围的下限（包含） (DECIMAL)。 [cite: 62]</li>
+<li>[cite_start]<code>最大值</code>: 范围的上限（包含） (DECIMAL)。 [cite: 62]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>结果</code>: 如果 <code>最小值</code> \&lt;= <code>数值</code> \&lt;= <code>最大值</code>，则输出 1 (true)，否则输出 0 (false) (DECIMAL)。 [cite: 62]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要判断的数值连接到 <code>数值</code> 输入。 [cite: 62]</li>
+<li>[cite_start]将范围的最小值连接到 <code>最小值</code> 输入，最大值连接到 <code>最大值</code> 输入。 [cite: 62]</li>
+<li>[cite_start]从 <code>结果</code> 端口读取判断结果 (DECIMAL 类型，1 或 0)。 [cite: 62]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2>6. 向量与颜色 (Vector &amp; Color)</h2>
+<p>[cite_start]操作二维/三维向量及颜色信息。 [cite: 62]</p>
+<h3>6.1. <code>Combine</code> (组合为向量/颜色)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将四个数值组合成一个四维向量 (VECTOR)，可用于表示位置、方向或颜色 (RGBA)。 [cite: 63]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]X / R (DECIMAL): 向量的 X 分量 或 颜色的 R (红色) 分量。 [cite: 63]</li>
+<li>[cite_start]Y / G (DECIMAL): 向量的 Y 分量 或 颜色的 G (绿色) 分量。 [cite: 63]</li>
+<li>[cite_start]Z / B (DECIMAL): 向量的 Z 分量 或 颜色的 B (蓝色) 分量。 [cite: 63]</li>
+<li>[cite_start]W / A (DECIMAL): 向量的 W 分量 或 颜色的 A (透明度) 分量。 [cite: 63]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Vector (VECTOR): 组合成的四维向量 (X, Y, Z, W)。 [cite: 63]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将代表 X/R, Y/G, Z/B, W/A 的数值 (DECIMAL 类型) 分别连接到对应的四个输入端口。 [cite: 63, 64]</li>
+<li>[cite_start]从 <code>Vector</code> 输出端口读取组合成的四维向量 (VECTOR 类型)。 [cite: 64]</li>
+</ol>
+</li>
+</ul>
+<h3>6.2. <code>Split</code> (分解向量/颜色)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个四维向量 (VECTOR) 分解为其四个组成数值，可用于提取坐标分量或颜色通道。 [cite: 65]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector (VECTOR): 需要分解的四维向量。 [cite: 65]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]X / R (DECIMAL): 向量的 X 分量 或 颜色的 R (红色) 分量。 [cite: 65]</li>
+<li>[cite_start]Y / G (DECIMAL): 向量的 Y 分量 或 颜色的 G (绿色) 分量。 [cite: 65]</li>
+<li>[cite_start]Z / B (DECIMAL): 向量的 Z 分量 或 颜色的 B (蓝色) 分量。 [cite: 65]</li>
+<li>[cite_start]W / A (DECIMAL): 向量的 W 分量 或 颜色的 A (透明度) 分量。 [cite: 65]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要分解的四维向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入端口。 [cite: 65]</li>
+<li>[cite_start]从对应的 <code>X/R</code>, <code>Y/G</code>, <code>Z/B</code>, <code>W/A</code> 输出端口读取分解出的数值 (DECIMAL 类型)。 [cite: 66]</li>
+</ol>
+</li>
+</ul>
+<h3>6.3. <code>NORMALIZE VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个三维向量标准化（转换为单位向量，长度为 1）。 [cite: 67]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要标准化的三维向量 (VECTOR)。 [cite: 67]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]normalized(Vector): 标准化后的单位向量 (VECTOR)。 [cite: 67]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要标准化的三维向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入。 [cite: 67]</li>
+<li>[cite_start]从 <code>normalized(Vector)</code> 输出读取标准化后的单位向量 (VECTOR 类型)。 [cite: 67]</li>
+</ol>
+</li>
+</ul>
+<h3>6.4. <code>VECTOR DOT PRODUCT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算两个三维向量的点积。 [cite: 68]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个三维向量 (VECTOR)。 [cite: 68]</li>
+<li>[cite_start]B: 第二个三维向量 (VECTOR)。 [cite: 68]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A · B: A 和 B 的点积 (DECIMAL)。 [cite: 68]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算点积的两个三维向量 (VECTOR 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 68]</li>
+<li>[cite_start]从 <code>A · B</code> 输出读取点积 (DECIMAL 类型)。 [cite: 68]</li>
+</ol>
+</li>
+</ul>
+<h3>6.5. <code>VECTOR CROSS PRODUCT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算两个三维向量的叉积。 [cite: 69]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个三维向量 (VECTOR)。 [cite: 69]</li>
+<li>[cite_start]B: 第二个三维向量 (VECTOR)。 [cite: 69]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A × B: A 和 B 的叉积 (VECTOR)，结果向量垂直于 A 和 B 构成的平面。 [cite: 69]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算叉积的两个三维向量 (VECTOR 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 69]</li>
+<li>[cite_start]从 <code>A × B</code> 输出读取叉积 (VECTOR 类型)。 [cite: 69]</li>
+</ol>
+</li>
+</ul>
+<h3>6.6. <code>MAGNITUDE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算输入向量的幅度（长度或大小）。 [cite: 70]</li>
+<li>[cite_start]<strong>输入</strong>: 一个向量 (VECTOR)。 [cite: 70]</li>
+<li>[cite_start]<strong>输出</strong>: 该向量的幅度 (DECIMAL)。 [cite: 70]</li>
+<li>[cite_start]<strong>使用方法</strong>: 将向量连接到输入端口，从输出端口读取其长度值。 [cite: 70]</li>
+</ul>
+<h3>6.7. <code>VECTOR ADD</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个三维向量相加（对应分量相加）。 [cite: 71]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个三维向量 (VECTOR)。 [cite: 71]</li>
+<li>[cite_start]B: 第二个三维向量 (VECTOR)。 [cite: 71]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A + B: A 和 B 的和 (VECTOR)。 [cite: 71]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相加的两个三维向量 (VECTOR 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 71]</li>
+<li>[cite_start]从 <code>A + B</code> 输出读取和 (VECTOR 类型)。 [cite: 71]</li>
+</ol>
+</li>
+</ul>
+<h3>6.8. <code>VECTOR SUBTRACT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个三维向量相减（对应分量相减）。 [cite: 72]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 被减数三维向量 (VECTOR)。 [cite: 72]</li>
+<li>[cite_start]B: 减数三维向量 (VECTOR)。 [cite: 72]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A - B: A 和 B 的差 (VECTOR)。 [cite: 72]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相减的两个三维向量 (VECTOR 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 72]</li>
+<li>[cite_start]从 <code>A - B</code> 输出读取差 (VECTOR 类型)。 [cite: 72]</li>
+</ol>
+</li>
+</ul>
+<h3>6.9. <code>VECTOR MULTIPLY</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个三维向量的每个分量乘以一个标量。 [cite: 73]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要相乘的三维向量 (VECTOR)。 [cite: 73]</li>
+<li>[cite_start]Scalar: 标量 (DECIMAL)。 [cite: 73]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Vector * Scalar: 向量和标量的积 (VECTOR)。 [cite: 73]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相乘的三维向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入，将标量 (DECIMAL 类型) 连接到 <code>Scalar</code> 输入。 [cite: 73]</li>
+<li>[cite_start]从 <code>Vector * Scalar</code> 输出读取积 (VECTOR 类型)。 [cite: 73]</li>
+</ol>
+</li>
+</ul>
+<h3>6.10. <code>VECTOR DIVIDE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个三维向量的每个分量除以一个标量。 [cite: 74]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要相除的三维向量 (VECTOR)。 [cite: 74]</li>
+<li>[cite_start]Scalar: 标量 (DECIMAL)。注意：除数不能为 0。 [cite: 74]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Vector / Scalar: 向量和标量的商 (VECTOR)。 [cite: 74]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要相除的三维向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入，将标量 (DECIMAL 类型) 连接到 <code>Scalar</code> 输入。 [cite: 74]</li>
+<li>[cite_start]从 <code>Vector / Scalar</code> 输出读取商 (VECTOR 类型)。 [cite: 74]</li>
+</ol>
+</li>
+</ul>
+<h3>6.11. <code>HSV to RGB</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将颜色从 HSV (色相, 饱和度, 明度) 颜色空间转换为 RGB (红, 绿, 蓝) 颜色空间。 [cite: 75]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]H: 色相 (DECIMAL，范围通常在 0 到 1 或 0 到 360，具体取决于实现)。 [cite: 75]</li>
+<li>[cite_start]S: 饱和度 (DECIMAL，范围通常在 0 到 1 之间)。 [cite: 75]</li>
+<li>[cite_start]V: 明度 (DECIMAL，范围通常在 0 到 1 之间)。 [cite: 75]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]RGB Color: 转换后的 RGB 颜色值 (通常是一个 VECTOR，X=R, Y=G, Z=B, W可能为1或Alpha)。 [cite: 75]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将色相 (DECIMAL 类型) 连接到 <code>H</code> 输入，将饱和度 (DECIMAL 类型) 连接到 <code>S</code> 输入，将明度 (DECIMAL 类型) 连接到 <code>V</code> 输入。 [cite: 75]</li>
+<li>[cite_start]从 <code>RGB Color</code> 输出读取转换后的 RGB 颜色值 (VECTOR 类型)。 [cite: 75, 76]</li>
+</ol>
+</li>
+</ul>
+<h3>6.12. <code>RGB to HSV</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将颜色从 RGB (红, 绿, 蓝) 颜色空间转换为 HSV (色相, 饱和度, 明度) 颜色空间。 [cite: 76]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]R: 红色分量 (DECIMAL，范围通常在 0 到 1 或 0 到 255)。 [cite: 76]</li>
+<li>[cite_start]G: 绿色分量 (DECIMAL，范围同 R)。 [cite: 76]</li>
+<li>[cite_start]B: 蓝色分量 (DECIMAL，范围同 R)。 [cite: 76]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]HSV Color: 转换后的 HSV 颜色值 (通常是一个 VECTOR，X=H, Y=S, Z=V, W可能未使用)。 [cite: 76]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将红色分量 (DECIMAL 类型) 连接到 <code>R</code> 输入，将绿色分量 (DECIMAL 类型) 连接到 <code>G</code> 输入，将蓝色分量 (DECIMAL 类型) 连接到 <code>B</code> 输入。(注意输入范围) [cite: 76]</li>
+<li>[cite_start]从 <code>HSV Color</code> 输出读取转换后的 HSV 颜色值 (VECTOR 类型)。 [cite: 76, 77]</li>
+</ol>
+</li>
+</ul>
+<h3>6.13. <code>OFFSET VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 通过指定偏移量来移动一个向量（相当于向量加法）。 [cite: 77]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要移动的向量 (VECTOR)。 [cite: 77]</li>
+<li>[cite_start]Offset: 偏移量 (VECTOR)。 [cite: 77]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Vector + Offset: 移动后的向量 (VECTOR)。 [cite: 77]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要移动的向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入，将偏移量 (VECTOR 类型) 连接到 <code>Offset</code> 输入。 [cite: 77]</li>
+<li>[cite_start]从 <code>Vector + Offset</code> 输出读取移动后的向量 (VECTOR 类型)。 [cite: 77]</li>
+</ol>
+</li>
+</ul>
+<h3>6.14. <code>ROTATE VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个向量绕指定轴旋转一定角度。 [cite: 78]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要旋转的向量 (VECTOR)。 [cite: 78]</li>
+<li>[cite_start]Axis: 旋转轴 (VECTOR)。(在 2D 游戏中，通常是 Z 轴 (0,0,1) 或其负方向)。 [cite: 78]</li>
+<li>[cite_start]Angle: 旋转角度 (DECIMAL，弧度)。 [cite: 78]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Rotated Vector: 旋转后的向量 (VECTOR)。 [cite: 78]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要旋转的向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入，将旋转轴 (VECTOR 类型) 连接到 <code>Axis</code> 输入，将旋转角度 (DECIMAL 类型，以弧度为单位) 连接到 <code>Angle</code> 输入。 [cite: 78]</li>
+<li>[cite_start]从 <code>Rotated Vector</code> 输出读取旋转后的向量 (VECTOR 类型)。 [cite: 78]</li>
+</ol>
+</li>
+</ul>
+<h3>6.15. <code>SCALE VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 缩放一个向量（相当于向量乘以标量）。 [cite: 79]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Vector: 要缩放的向量 (VECTOR)。 [cite: 79]</li>
+<li>[cite_start]Scale: 缩放比例 (DECIMAL)。 [cite: 79]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Scaled Vector: 缩放后的向量 (VECTOR)。 [cite: 79]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要缩放的向量 (VECTOR 类型) 连接到 <code>Vector</code> 输入，将缩放比例 (DECIMAL 类型) 连接到 <code>Scale</code> 输入。 [cite: 79]</li>
+<li>[cite_start]从 <code>Scaled Vector</code> 输出读取缩放后的向量 (VECTOR 类型)。 [cite: 79]</li>
+</ol>
+</li>
+</ul>
+<h3>6.16. <code>LERP VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 在两个向量之间进行线性插值。 [cite: 80]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 起始向量 (VECTOR)。 [cite: 80]</li>
+<li>[cite_start]B: 结束向量 (VECTOR)。 [cite: 80]</li>
+<li>[cite_start]T: 插值系数 (DECIMAL)，范围通常在 0 到 1 之间。0 时结果为 A，1 时结果为 B。 [cite: 80]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A + (B - A) * T: A 和 B 之间的插值结果 (VECTOR)。 [cite: 80]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将起始向量 (VECTOR 类型) 连接到 <code>A</code> 输入，将结束向量 (VECTOR 类型) 连接到 <code>B</code> 输入，将插值系数 (DECIMAL 类型，通常 0-1) 连接到 <code>T</code> 输入。 [cite: 80]</li>
+<li>[cite_start]从 <code>A + (B - A) * T</code> 输出读取插值结果 (VECTOR 类型)。 [cite: 80]</li>
+</ol>
+</li>
+</ul>
+<h3>6.17. <code>CLAMP VECTOR</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将向量的每个分量限制在指定的标量最小值和最大值之间。 [cite: 81]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]INPUT / <code>Vector</code>: 要限制的向量 (VECTOR)。 [cite: 81]</li>
+<li>[cite_start]Min: 每个分量允许的最小值 (DECIMAL)。 [cite: 81]</li>
+<li>[cite_start]Max: 每个分量允许的最大值 (DECIMAL)。 [cite: 81]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]clamp(Vector, Min, Max) / <code>RESULT</code>: 将向量的每个分量限制在 Min 和 Max 之间的结果 (VECTOR)。 [cite: 81]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要限制的向量 (VECTOR 类型) 连接到 <code>INPUT</code>/<code>Vector</code> 输入，将最小值 (DECIMAL 类型) 连接到 <code>Min</code> 输入，将最大值 (DECIMAL 类型) 连接到 <code>Max</code> 输入。 [cite: 81]</li>
+<li>[cite_start]从输出端口读取结果 (VECTOR 类型)。 [cite: 81]</li>
+</ol>
+</li>
+</ul>
+<h3>6.18. <code>WorldPositionToLocal</code> (世界坐标转局部坐标)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个世界坐标系下的位置向量转换为指定实体局部坐标系下的相对位置向量。 [cite: 82]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>参考实体</code>: 提供局部坐标系的参考实体 (ENTITY)。 [cite: 82]</li>
+<li>[cite_start]<code>世界坐标</code>: 需要转换的世界坐标位置 (VECTOR)。 [cite: 82]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>局部坐标</code>: 转换后，相对于 <code>参考实体</code> 的局部坐标位置 (VECTOR)。 [cite: 82]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将定义局部坐标系的实体 (ENTITY 类型) 连接到 <code>参考实体</code> 输入。 [cite: 82]</li>
+<li>[cite_start]将需要转换的世界坐标向量 (VECTOR 类型) 连接到 <code>世界坐标</code> 输入。 [cite: 82]</li>
+<li>[cite_start]从 <code>局部坐标</code> 端口读取转换得到的局部坐标向量 (VECTOR 类型)。 [cite: 82]</li>
+</ol>
+</li>
+</ul>
+<h3>6.19. <code>LocalPositionToWorld</code> (局部坐标转世界坐标)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个相对于指定实体局部坐标系的位置向量转换为世界坐标系下的位置向量。 [cite: 83]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>参考实体</code>: 定义局部坐标系的参考实体 (ENTITY)。 [cite: 83]</li>
+<li>[cite_start]<code>局部坐标</code>: 需要转换的、相对于 <code>参考实体</code> 的局部坐标位置 (VECTOR)。 [cite: 83]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>世界坐标</code>: 转换后的世界坐标位置 (VECTOR)。 [cite: 83]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将定义局部坐标系的实体 (ENTITY 类型) 连接到 <code>参考实体</code> 输入。 [cite: 83]</li>
+<li>[cite_start]将需要转换的局部坐标向量 (VECTOR 类型) 连接到 <code>局部坐标</code> 输入。 [cite: 83]</li>
+<li>[cite_start]从 <code>世界坐标</code> 端口读取转换得到的世界坐标向量 (VECTOR 类型)。 [cite: 83]</li>
+</ol>
+</li>
+</ul>
+<h3>6.20. <code>SQR MAGNITUDE</code> (向量长度平方)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算输入向量的长度（模）的平方。这在比较向量长度时比直接计算长度（需要开平方根）更高效。 [cite: 84]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>INPUT (X:0 Y:0 Z:0 W:0)</code> (绿色): 一个向量 (VECTOR)。 [cite: 84]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT (0.00)</code> (蓝色): 该向量长度的平方值 (DECIMAL)。 [cite: 84]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算长度平方的向量 (VECTOR 类型) 连接到 <code>INPUT</code> 端口。 [cite: 84]</li>
+<li>[cite_start]从 <code>RESULT</code> 端口读取其长度的平方值 (DECIMAL 类型)。 [cite: 84]</li>
+</ol>
+</li>
+</ul>
+<h2>7. 位运算 (Bitwise Operations)</h2>
+<p>[cite_start]对整数进行二进制位操作。 [cite: 84]</p>
+<h3>7.1. <code>SHIFT LEFT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个整数的二进制位向左移动指定的位数（相当于乘以 2 的 Bits 次方）。 [cite: 85]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Value: 要进行移位操作的整数 (DECIMAL)。 [cite: 85]</li>
+<li>[cite_start]Bits: 要移动的位数 (DECIMAL)。 [cite: 85]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Value \&lt;\&lt; Bits: 移位后的整数 (DECIMAL)。 [cite: 85]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要进行移位操作的整数 (DECIMAL 类型) 连接到 <code>Value</code> 输入，将要移动的位数 (DECIMAL 类型) 连接到 <code>Bits</code> 输入。 [cite: 85]</li>
+<li>[cite_start]从 <code>Value &lt;&lt; Bits</code> 输出读取移位后的整数 (DECIMAL 类型)。 [cite: 85]</li>
+</ol>
+</li>
+</ul>
+<h3>7.2. <code>SHIFT RIGHT</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个整数的二进制位向右移动指定的位数（相当于除以 2 的 Bits 次方，通常为逻辑右移或算术右移，取决于实现）。 [cite: 86]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Value: 要进行移位操作的整数 (DECIMAL)。 [cite: 86]</li>
+<li>[cite_start]Bits: 要移动的位数 (DECIMAL)。 [cite: 86]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Value &gt;&gt; Bits: 移位后的整数 (DECIMAL)。 [cite: 86]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要进行移位操作的整数 (DECIMAL 类型) 连接到 <code>Value</code> 输入，将要移动的位数 (DECIMAL 类型) 连接到 <code>Bits</code> 输入。 [cite: 86]</li>
+<li>[cite_start]从 <code>Value &gt;&gt; Bits</code> 输出读取移位后的整数 (DECIMAL 类型)。 [cite: 86]</li>
+</ol>
+</li>
+</ul>
+<hr />
+<h2>8. 实体操作 (Entity Operations)</h2>
+<p>[cite_start]与游戏世界中的物体进行交互。 [cite: 86]</p>
+<h3>8.1. <code>Position</code> (实体位置)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体在世界坐标系中的位置。 [cite: 87]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity (ENTITY): 需要操作的实体。 [cite: 87]</li>
+<li>[cite_start]Position (VECTOR): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 需要设置给实体的新世界坐标位置向量。 [cite: 87]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Position (VECTOR): 实体当前的世界坐标位置向量。 [cite: 87]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取位置</strong>： 仅将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，即可从 <code>Position</code> 输出读取当前的位置向量 (VECTOR 类型)。 [cite: 87]</li>
+<li>[cite_start]<strong>设置位置</strong>： 同时将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，并将要设置的位置向量 (VECTOR 类型) 连接到 <code>Position</code> 输入。模块会尝试设置实体的位置，并同时在 <code>Position</code> 输出当前（理论上是刚设置的）位置。 [cite: 87]</li>
+</ol>
+</li>
+</ul>
+<h3>8.2. <code>Angle</code> (实体角度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体在世界坐标系中的旋转角度 (通常指 Z 轴旋转)。 [cite: 88]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity (ENTITY): 需要操作的实体。 [cite: 88]</li>
+<li>[cite_start]Angle (DECIMAL): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 需要设置给实体的新旋转角度值 (单位：度)。 [cite: 88]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Angle (DECIMAL): 实体当前的旋转角度值 (单位：度)。 [cite: 88]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取角度</strong>： 仅将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，即可从 <code>Angle</code> 输出读取当前的旋转角度 (DECIMAL 类型)。 [cite: 88]</li>
+<li>[cite_start]<strong>设置角度</strong>： 同时将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，并将要设置的角度值 (DECIMAL 类型) 连接到 <code>Angle</code> 输入。模块会尝试设置实体的角度，并同时在 <code>Angle</code> 输出当前（理论上是刚设置的）角度。 [cite: 88]</li>
+</ol>
+</li>
+</ul>
+<h3>8.3. <code>Size</code> (实体尺寸/缩放)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体各个轴向的缩放比例。 [cite: 89]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity (ENTITY): 需要操作的实体。 [cite: 89]</li>
+<li>[cite_start]Size (VECTOR): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 需要设置给实体的新缩放比例向量 (X, Y 分量分别对应 2D 缩放)。 [cite: 89]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Size (VECTOR): 实体当前的缩放比例向量。 [cite: 89]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取尺寸</strong>： 仅将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，即可从 <code>Size</code> 输出读取当前的缩放比例向量 (VECTOR 类型)。 [cite: 89]</li>
+<li>[cite_start]<strong>设置尺寸</strong>： 同时将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，并将要设置的缩放比例向量 (VECTOR 类型) 连接到 <code>Size</code> 输入。模块会尝试设置实体的缩放，并同时在 <code>Size</code> 输出当前（理论上是刚设置的）缩放比例。注意：缩放值为 0 可能导致物体消失。 [cite: 89]</li>
+</ol>
+</li>
+</ul>
+<h3>8.4. <code>Velocity</code> (实体速度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体在世界坐标系中的线速度。 [cite: 90]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity (ENTITY): 需要操作的实体。 [cite: 90]</li>
+<li>[cite_start]Velocity (VECTOR): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 需要设置给实体的新速度向量。 [cite: 90]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Velocity (VECTOR): 实体当前的速度向量。 [cite: 90]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取速度</strong>： 仅将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，即可从 <code>Velocity</code> 输出读取当前的速度向量 (VECTOR 类型)。 [cite: 90]</li>
+<li>[cite_start]<strong>设置速度</strong>： 同时将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，并将要设置的速度向量 (VECTOR 类型) 连接到 <code>Velocity</code> 输入。模块会尝试设置实体的速度，并同时在 <code>Velocity</code> 输出当前（理论上是刚设置的）速度。 [cite: 90]</li>
+</ol>
+</li>
+</ul>
+<h3>8.5. <code>AngularVelocity</code> (实体角速度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体的角速度 (通常指 Z 轴旋转速度)。 [cite: 91]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity (ENTITY): 需要操作的实体。 [cite: 91]</li>
+<li>[cite_start]Angular Velocity (DECIMAL): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 需要设置给实体的新角速度值 (单位：度/秒 ）。 [cite: 91]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Angular Velocity (DECIMAL): 实体当前的角速度值(单位：度/秒 ）。 [cite: 91]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取角速度</strong>： 仅将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，即可从 <code>Angular Velocity</code> 输出读取当前的角速度 (DECIMAL 类型)。 [cite: 91]</li>
+<li>[cite_start]<strong>设置角速度(https://www.google.com/search?q=%E5%8F%AF%E9%80%89)</strong>： 同时将目标实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入，并将要设置的角速度值 (DECIMAL 类型) 连接到 <code>Angular Velocity</code> 输入。模块会尝试设置实体的角速度，并同时在 <code>Angular Velocity</code> 输出实际上的角速度。 [cite: 91]</li>
+</ol>
+</li>
+</ul>
+<h3>8.6. <code>MASS</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取一个实体的质量。 [cite: 91]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Entity: 要获取质量的实体 (ENTITY)。 [cite: 91]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Mass: 实体的质量 (DECIMAL)。 [cite: 92]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要获取质量的实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入。 [cite: 92]</li>
+<li>[cite_start]从 <code>Mass</code> 输出读取实体的质量 (DECIMAL 类型)。 [cite: 92]</li>
+</ol>
+</li>
+</ul>
+<h3>8.7. <code>add FORCE</code></h3>
+<ul>
+<li><strong>功能</strong>: 对一个实体施加一个力（作用于质心）。</li>
+<li><strong>输入</strong>:<ul>
+<li>Entity: 要施加力的实体 (ENTITY)。</li>
+<li>Force: 要施加的力 (VECTOR)，表示力的大小和方向。</li>
+</ul>
+</li>
+<li><strong>输出</strong>: 无</li>
+<li><strong>使用方法</strong>:<ol>
+<li>将要施加力的实体 (ENTITY 类型) 连接到 <code>Entity</code> 输入。</li>
+<li>将要施加的力 (VECTOR 类型) 连接到 <code>Force</code> 输入。该模块会立即施加一次力。</li>
+</ol>
+</li>
+</ul>
+<h3>8.8. <code>delete</code> (删除物体)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 销毁一个实体。 [cite: 93, 103]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 要销毁的实体 (ENTITY)。 [cite: 93, 103]</li>
+<li>[cite_start]<code>INPUT (0.00)</code> (蓝色): 触发信号 (DECIMAL)。当此输入端口接收到的值为 1 时，模块会执行销毁操作；输入为 0 或其他值时，不执行任何操作。 [cite: 93, 103]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出</strong>: 无 [cite: 93, 103]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要销毁的实体 (ENTITY 类型) 连接到 <code>OBJECT</code> 输入端口。 [cite: 93, 103]</li>
+<li>[cite_start]将一个控制信号（例如，条件判断的结果或按钮触发信号，DECIMAL 类型）连接到 <code>INPUT</code> 输入端口。 [cite: 93, 103]</li>
+<li>[cite_start]只有当 <code>INPUT</code> 输入端口的值为 1 时，连接到 <code>OBJECT</code> 端口的实体才会被销毁。 [cite: 93, 103]</li>
+</ol>
+</li>
+</ul>
+<h3>8.9. <code>IDIsValid</code> (实体ID有效性检查)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 检查一个输入的实体 ID 是否对应当前游戏中一个有效存在的实体。 [cite: 94]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体ID</code>: 需要检查的实体 ID 数值 (DECIMAL)。 [cite: 94]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>是否有效</code>: 如果该 ID 对应一个有效实体，则输出 1 (true)，否则输出 0 (false) (DECIMAL)。 [cite: 94]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要检查的实体 ID (DECIMAL 类型) 连接到 <code>实体ID</code> 输入。 [cite: 94]</li>
+<li>[cite_start]从 <code>是否有效</code> 端口读取检查结果 (DECIMAL 类型，1 或 0)。 [cite: 94]</li>
+</ol>
+</li>
+</ul>
+<h3>8.10. <code>WorldAngleToLocal</code> (世界角度转局部角度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个世界坐标系下的角度转换为相对于指定实体朝向的局部角度。 [cite: 95]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>参考实体</code>: 提供局部朝向参考的实体 (ENTITY)。 [cite: 95]</li>
+<li>[cite_start]<code>世界角度</code>: 需要转换的世界角度（单位：度） (DECIMAL)。 [cite: 95]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>局部角度</code>: 转换后，相对于 <code>参考实体</code> 朝向的局部角度（单位：度） (DECIMAL)。 [cite: 95]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将定义局部朝向的实体 (ENTITY 类型) 连接到 <code>参考实体</code> 输入。 [cite: 95]</li>
+<li>[cite_start]将需要转换的世界角度 (DECIMAL 类型，度数) 连接到 <code>世界角度</code> 输入。 [cite: 95]</li>
+<li>[cite_start]从 <code>局部角度</code> 端口读取转换得到的局部角度 (DECIMAL 类型，度数)。 [cite: 95]</li>
+</ol>
+</li>
+</ul>
+<h3>8.11. <code>LocalAngleToWorld</code> (局部角度转世界角度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个相对于指定实体朝向的局部角度转换为世界坐标系下的角度。 [cite: 96]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>参考实体</code>: 定义局部朝向参考的实体 (ENTITY)。 [cite: 96]</li>
+<li>[cite_start]<code>局部角度</code>: 需要转换的、相对于 <code>参考实体</code> 朝向的局部角度（单位：度） (DECIMAL)。 [cite: 96]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>世界角度</code>: 转换后的世界角度（单位：度） (DECIMAL)。 [cite: 96]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将定义局部朝向的实体 (ENTITY 类型) 连接到 <code>参考实体</code> 输入。 [cite: 96]</li>
+<li>[cite_start]将需要转换的局部角度 (DECIMAL 类型，度数) 连接到 <code>局部角度</code> 输入。 [cite: 96]</li>
+<li>[cite_start]从 <code>世界角度</code> 端口读取转换得到的世界角度 (DECIMAL 类型，度数)。 [cite: 96]</li>
+</ol>
+</li>
+</ul>
+<h3>8.12. <code>LookAt</code> (朝向目标)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 控制一个实体旋转，使其朝向另一个实体的位置 (通常是瞬间完成或平滑过渡，取决于实现和 <code>速度/因子</code>)。 [cite: 97]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>自身实体</code>: 需要旋转以朝向目标的实体 (ENTITY)。 [cite: 97]</li>
+<li>[cite_start]<code>目标实体</code>: 被朝向的目标实体 (ENTITY)。 [cite: 97]</li>
+<li>[cite_start]<code>速度/因子</code>: 物体移动向目标物体的速度，如果为零物体不会移动到目标物体处 [cite: 97]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出</strong>: 无 (这是一个执行动作的模块)。 [cite: 97]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要旋转的实体连接到 <code>自身实体</code> 输入。 [cite: 97]</li>
+<li>[cite_start]将被朝向的实体连接到 <code>目标实体</code> 输入。 [cite: 97]</li>
+<li>[cite_start]连接一个控制速度或插值的数值到 <code>速度/因子</code> 输入。 [cite: 97]</li>
+</ol>
+</li>
+</ul>
+<h3>8.13. <code>MassCenter</code> (质心位置)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取指定实体的质心（质量中心）在世界坐标系中的位置。 [cite: 98]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体</code>: 需要获取质心位置的实体 (ENTITY)。 [cite: 98]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>质心坐标</code>: 该实体质心的世界坐标位置向量 (VECTOR)。 [cite: 98]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要获取质心的实体 (ENTITY 类型) 连接到 <code>实体</code> 输入。 [cite: 98]</li>
+<li>[cite_start]从 <code>质心坐标</code> 端口读取该实体的质心位置向量 (VECTOR 类型)。 [cite: 98]</li>
+</ol>
+</li>
+</ul>
+<h3>8.14. <code>VelocityAtPosition</code> (指定点速度)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取一个刚体（实体）上指定世界坐标点的瞬时速度向量（考虑线速度和角速度引起的旋转）。 [cite: 99]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体</code>: 运动的实体 (ENTITY)。 [cite: 99]</li>
+<li>[cite_start]<code>世界坐标点</code>: 实体上需要查询速度的点的当前世界坐标 (VECTOR)。 [cite: 99]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>速度向量</code>: 该点在当前时刻的世界速度向量 (VECTOR)。 [cite: 99]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将目标实体 (ENTITY 类型) 连接到 <code>实体</code> 输入。 [cite: 99]</li>
+<li>[cite_start]将需要查询速度的世界坐标点 (VECTOR 类型) 连接到 <code>世界坐标点</code> 输入。 [cite: 99]</li>
+<li>[cite_start]从 <code>速度向量</code> 端口读取该点的瞬时速度 (VECTOR 类型)。 [cite: 99]</li>
+</ol>
+</li>
+</ul>
+<h3>8.15. <code>CanBeActivated</code> (可激活检查)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 检查指定的实体是否包含可以被激活的组件或机制（例如按钮、引擎等）。 [cite: 100]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体</code>: 需要检查的实体 (ENTITY)。 [cite: 100]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>可激活</code>: 如果实体可以被激活，输出 1 (true)，否则输出 0 (false) (DECIMAL)。 [cite: 100]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要检查的实体 (ENTITY 类型) 连接到 <code>实体</code> 输入。 [cite: 100]</li>
+<li>[cite_start]从 <code>可激活</code> 端口读取检查结果 (DECIMAL 类型，1 或 0)。 [cite: 100]</li>
+</ol>
+</li>
+</ul>
+<h3>8.16. <code>Ignite</code> (点燃/状态)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 点燃指定的实体，或查询其是否处于点燃状态。 [cite: 101]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体</code>: 需要操作或查询的实体 (ENTITY)。 [cite: 101]</li>
+<li>[cite_start]<code>点燃信号</code>: 输入 1 尝试点燃该实体；输入 0 则不执行点燃操作 (DECIMAL)。 [cite: 101]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>燃烧状态</code>: 输出 1 表示实体当前正在燃烧，输出 0 表示未燃烧 (DECIMAL)。 [cite: 101]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将目标实体 (ENTITY 类型) 连接到 <code>实体</code> 输入。 [cite: 101]</li>
+<li>[cite_start]连接一个控制信号 (DECIMAL 类型，通常为 1) 到 <code>点燃信号</code> 输入来尝试点燃。 [cite: 101]</li>
+<li>[cite_start]从 <code>燃烧状态</code> 端口读取实体当前的燃烧状态 (DECIMAL 类型，1 或 0)。 [cite: 101]</li>
+</ol>
+</li>
+</ul>
+<h3>8.17. <code>Extinguish</code> (熄灭)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 熄灭指定实体上的火焰。 [cite: 102]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>实体</code>: 需要被熄灭火焰的实体 (ENTITY)。 [cite: 102]</li>
+<li>[cite_start]<code>熄灭信号</code>: 输入 1 来触发熄灭动作 (DECIMAL)。 [cite: 102]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出</strong>: 无 (这是一个执行动作的模块)。 [cite: 102]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要熄灭火焰的实体 (ENTITY 类型) 连接到 <code>实体</code> 输入。 [cite: 102]</li>
+<li>[cite_start]连接一个触发信号 (DECIMAL 类型，通常为 1) 到 <code>熄灭信号</code> 输入来执行熄灭。 [cite: 102]</li>
+</ol>
+</li>
+</ul>
+<h3>8.19. <code>ADD FORCE AT POSITION</code> (在指定位置施加力)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 对一个实体上的指定局部坐标点施加一个力。 [cite: 104]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 要施加力的实体 (ENTITY)。 [cite: 104]</li>
+<li>[cite_start]<code>FORCE (X:0 Y:0 Z:0 W:0)</code> (绿色): 要施加的力向量 (VECTOR)，表示力的大小和方向。 [cite: 104]</li>
+<li>[cite_start]<code>OFFSET (X:0 Y:0 Z:0 W:0)</code> (绿色): 相对于实体质心的局部坐标偏移量 (VECTOR)，力将作用于此点。 [cite: 104]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出</strong>: 无 [cite: 104]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要施加力的实体 (ENTITY 类型) 连接到 <code>OBJECT</code> 输入。 [cite: 104]</li>
+<li>[cite_start]将要施加的力向量 (VECTOR 类型) 连接到 <code>FORCE</code> 输入。 [cite: 104]</li>
+<li>[cite_start]将力的作用点相对于实体质心的偏移向量 (VECTOR 类型) 连接到 <code>OFFSET</code> 输入。该模块会立即在该局部位置对实体施加一次力。 [cite: 104]</li>
+</ol>
+</li>
+</ul>
+<h3>8.20. <code>COLLISION</code> (碰撞状态)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取或设置实体的碰撞是否启用。 [cite: 105]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 需要操作的实体 (ENTITY)。 [cite: 105]</li>
+<li>[cite_start]<code>ENABLE COLLISION (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 设置碰撞是否启用的信号。输入 1 启用碰撞，输入 0 禁用碰撞。 [cite: 105]</li>
+<li>[cite_start]<code>DISABLE COLLISION (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 专门用于禁用碰撞的信号。输入 1 禁用碰撞。 (注：此端口功能可能与 <code>ENABLE COLLISION</code> 输入 0 重叠或有特定优先级，通常使用 <code>ENABLE COLLISION</code> 更为通用。) [cite: 105]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>COLLISION ENABLED (0.00)</code> (蓝色): 实体当前的碰撞启用状态。1 表示已启用，0 表示已禁用 (DECIMAL)。 [cite: 105]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]<strong>获取碰撞状态</strong>: 仅将目标实体 (ENTITY 类型) 连接到 <code>OBJECT</code> 输入，即可从 <code>COLLISION ENABLED</code> 输出读取当前的碰撞状态。 [cite: 105]</li>
+<li><strong>设置碰撞状态</strong>:<ul>
+<li>[cite_start]通过 <code>ENABLE COLLISION</code>: 将目标实体连接到 <code>OBJECT</code> 输入，并将控制信号 (1 或 0) 连接到 <code>ENABLE COLLISION</code> 输入。 [cite: 106]</li>
+<li>[cite_start]通过 <code>DISABLE COLLISION</code>: 将目标实体连接到 <code>OBJECT</code> 输入，并将控制信号 (通常为 1) 连接到 <code>DISABLE COLLISION</code> 输入以禁用碰撞。 [cite: 106]</li>
+</ul>
+</li>
+<li>[cite_start]模块会尝试设置实体的碰撞状态，并同时在 <code>COLLISION ENABLED</code> 输出当前状态。 [cite: 106]</li>
+</ol>
+</li>
+</ul>
+<h3>8.21. <code>ELEVATION</code> (实体高度/层级)</h3>
+<p>[cite_start]<code>ELEVATION</code> 模块的核心功能是计算指定的<strong>目标坐标点</strong>与<strong>参考实体</strong>的连线，和<strong>世界坐标系 X 轴正方向</strong>之间所形成的<strong>夹角</strong>。角度的范围为 -180° 到 +180°。 [cite: 107]</p>
+<ul>
+<li>[cite_start]当目标坐标点位于参考实体的<strong>上方</strong>（相对于世界坐标系的 Y 轴）时，计算出的夹角为<strong>正值</strong>。 [cite: 107]</li>
+<li>[cite_start]当目标坐标点位于参考实体的<strong>下方</strong>时，计算出的夹角为<strong>负值</strong>。 [cite: 107]</li>
+<li>[cite_start]当目标坐标点与参考实体在 Y 轴上处于同一高度时，若目标点在参考实体 X 轴正方向，则角度为 0°；若在 X 轴负方向，则角度为 180° 或 -180°。 [cite: 107]</li>
+</ul>
+<p><strong>输入端口</strong>：</p>
+<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): <strong>参考实体 (ENTITY)</strong>。计算角度时，以此实体的位置作为参考点（连线的起点）。 [cite: 107]</li>
+<li>[cite_start]<code>POSITION (X:0 Y:0 Z:0 W:0)</code> (绿色): <strong>目标坐标 (VECTOR)</strong>。计算角度时，以此坐标点作为连线的终点。通常使用其 X 和 Y 分量进行二维平面角度计算。 [cite: 107]</li>
+</ul>
+<p><strong>输出端口</strong>：</p>
+<ul>
+<li>[cite_start]<code>ANGLE (DEG) (0.00)</code> (蓝色): <strong>计算出的夹角 (DECIMAL)</strong>。单位为度，范围在 -180° 到 +180°之间。该值表示从参考实体指向目标坐标点的向量与世界X轴正方向之间的有向夹角。 [cite: 107]</li>
+</ul>
+<h3>8.22. <code>ENTITY ID</code> (获取实体ID)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取指定实体的唯一标识符 (ID)。每个在游戏世界中生成的实体通常都有一个独一无二的数字ID。 [cite: 108]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 需要获取其ID的实体 (ENTITY)。 [cite: 108]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>ID (0.00)</code> (蓝色): 该实体的唯一ID号 (DECIMAL)。如果输入未连接实体或实体无效，输出通常为0或一个特定的无效ID值。 [cite: 108]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将目标实体 (ENTITY 类型) 连接到 <code>OBJECT</code> 输入端口。 [cite: 108]</li>
+<li>[cite_start]从 <code>ID</code> 输出端口读取该实体的数字ID (DECIMAL 类型)。这个ID可以用于后续通过 <code>ID TO ENTITY</code> 模块重新获取实体引用，或者用于其他需要实体唯一标识的逻辑。 [cite: 108]</li>
+</ol>
+</li>
+</ul>
+<h3>8.23. <code>ID TO ENTITY</code> (ID转实体)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 通过实体的唯一标识符 (ID) 来获取该实体的引用。这允许你在知道一个实体ID的情况下，重新在芯片逻辑中“找到”并操作这个实体，即使你没有直接的实体连接。 [cite: 109]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>ID (0.00)</code> (蓝色): 要转换为实体引用的实体ID号 (DECIMAL)。 [cite: 109]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 与输入ID对应的实体 (ENTITY)。如果输入的ID无效或没有实体对应这个ID（例如实体已被销毁），则输出 NULL。 [cite: 109]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将包含目标实体ID的数值 (DECIMAL 类型) 连接到 <code>ID</code> 输入端口。 [cite: 109]</li>
+<li>[cite_start]从 <code>OBJECT</code> 输出端口获取对该实体的引用 (ENTITY 类型)。在使用前，最好检查输出是否为 NULL，以确保实体仍然有效。 [cite: 109]</li>
+<li>[cite_start]此模块常与 <code>ENTITY ID</code> 配合使用，或者用于当实体ID通过其他方式（如外部输入、保存的数据）获得时。 [cite: 109]</li>
+</ol>
+</li>
+</ul>
+<h3>8.24. <code>ADD ANGULAR FORCE</code> (施加角力/扭矩)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 对指定的实体施加一个角力（也称为扭矩），使其产生旋转加速度。 [cite: 110]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>OBJECT (NULL)</code> (紫色): 需要施加角力的实体 (ENTITY)。 [cite: 110]</li>
+<li>[cite_start]<code>ANGULAR FORCE (0.00)</code> (蓝色): 要施加的角力大小 (DECIMAL)。这个值通常代表扭矩的大小。正值和负值可能对应不同的旋转方向（例如，顺时针或逆时针，具体取决于游戏引擎的坐标系和物理实现）。 [cite: 110]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>输出</strong>: 无 (这是一个执行动作的模块)。 [cite: 110]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将目标实体 (ENTITY 类型) 连接到 <code>OBJECT</code> 输入端口。 [cite: 110]</li>
+<li>[cite_start]将代表角力大小的数值 (DECIMAL 类型) 连接到 <code>ANGULAR FORCE</code> 输入端口。 [cite: 110]</li>
+<li>[cite_start]模块会对实体在下一个芯片刷新周期之前施加一定的角力（可以理解为一直施加角力）。持续施加需要持续的信号或循环逻辑。注意角力的方向性，可能需要通过正负值来控制。 [cite: 110]</li>
+</ol>
+</li>
+</ul>
+<h2>9. 字符串操作 (String Operations)</h2>
+<p>[cite_start]处理文本信息。 [cite: 110]</p>
+<h3>9.1. <code>Add STRING</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将两个字符串连接起来。 [cite: 111]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]A: 第一个字符串 (STRING)。 [cite: 111]</li>
+<li>[cite_start]B: 第二个字符串 (STRING)。 [cite: 111]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]A + B: 连接后的字符串 (STRING)。 [cite: 111]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要连接的两个字符串 (STRING 类型) 连接到 <code>A</code> 和 <code>B</code> 输入。 [cite: 111]</li>
+<li>[cite_start]从 <code>A + B</code> 输出读取连接后的字符串 (STRING 类型)。 [cite: 111]</li>
+</ol>
+</li>
+</ul>
+<h3>9.2. <code>STRING LENGTH</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 获取一个字符串的长度。 [cite: 112]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要获取长度的字符串 (STRING)。 [cite: 112]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Length: 字符串的长度 (DECIMAL)。 [cite: 112]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要获取长度的字符串 (STRING 类型) 连接到 <code>String</code> 输入。 [cite: 112]</li>
+<li>[cite_start]从 <code>Length</code> 输出读取字符串的长度 (DECIMAL 类型)。 [cite: 112]</li>
+</ol>
+</li>
+</ul>
+<h3>9.3. <code>SUBSTRING</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 从一个字符串中提取子字符串。 [cite: 113]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要提取子字符串的字符串 (STRING)。 [cite: 113]</li>
+<li>[cite_start]Start: 起始位置 (DECIMAL，通常从 0 或 1 开始，取决于实现)。 [cite: 113]</li>
+<li>[cite_start]Length: 要提取的长度 (DECIMAL)。 [cite: 113]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Substring: 提取的子字符串 (STRING)。 [cite: 113]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要提取子字符串的字符串 (STRING 类型) 连接到 <code>String</code> 输入，将起始位置 (DECIMAL 类型) 连接到 <code>Start</code> 输入，将要提取的长度 (DECIMAL 类型) 连接到 <code>Length</code> 输入。 [cite: 113]</li>
+<li>[cite_start]从 <code>Substring</code> 输出读取提取的子字符串 (STRING 类型)。 [cite: 113]</li>
+</ol>
+</li>
+</ul>
+<h3>9.4. <code>REPLACE STRING</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 在一个字符串中替换所有出现的指定子字符串。 [cite: 114]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要进行替换的字符串 (STRING)。 [cite: 114]</li>
+<li>[cite_start]Old Value: 要被替换的子字符串 (STRING)。 [cite: 114]</li>
+<li>[cite_start]New Value: 用于替换的新字符串 (STRING)。 [cite: 114]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Replaced String: 替换后的字符串 (STRING)。 [cite: 114]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要进行替换的字符串 (STRING 类型) 连接到 <code>String</code> 输入，将要被替换的子字符串 (STRING 类型) 连接到 <code>Old Value</code> 输入，将用于替换的新字符串 (STRING 类型) 连接到 <code>New Value</code> 输入。 [cite: 114]</li>
+<li>[cite_start]从 <code>Replaced String</code> 输出读取替换后的字符串 (STRING 类型)。 [cite: 114]</li>
+</ol>
+</li>
+</ul>
+<h3>9.5. <code>TO UPPERCASE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个字符串转换为大写。 [cite: 115]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要转换为大写的字符串 (STRING)。 [cite: 115]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Uppercase String: 转换后的大写字符串 (STRING)。 [cite: 115]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要转换为大写的字符串 (STRING 类型) 连接到 <code>String</code> 输入。 [cite: 115]</li>
+<li>[cite_start]从 <code>Uppercase String</code> 输出读取转换后的大写字符串 (STRING 类型)。 [cite: 115]</li>
+</ol>
+</li>
+</ul>
+<h3>9.6. <code>TO LOWERCASE</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个字符串转换为小写。 [cite: 116]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要转换为小写的字符串 (STRING)。 [cite: 116]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Lowercase String: 转换后的小写字符串 (STRING)。 [cite: 116]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要转换为小写的字符串 (STRING 类型) 连接到 <code>String</code> 输入。 [cite: 116]</li>
+<li>[cite_start]从 <code>Lowercase String</code> 输出读取转换后的小写字符串 (STRING 类型)。 [cite: 116]</li>
+</ol>
+</li>
+</ul>
+<h3>9.7. <code>TRIM STRING</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 去除一个字符串开头和结尾的空白字符（空格、制表符等）。 [cite: 117]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要去除空白字符的字符串 (STRING)。 [cite: 117]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]Trimmed String: 去除空白字符后的字符串 (STRING)。 [cite: 117]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要去除空白字符的字符串 (STRING 类型) 连接到 <code>String</code> 输入。 [cite: 117]</li>
+<li>[cite_start]从 <code>Trimmed String</code> 输出读取去除空白字符后的字符串 (STRING 类型)。 [cite: 117]</li>
+</ol>
+</li>
+</ul>
+<h3>9.8. <code>TO NUMBER</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个字符串尝试转换为数值 (DECIMAL 或 VECTOR)。 [cite: 118]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]String: 要转换的字符串 (STRING)。 [cite: 118]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]转换后的数值 (DECIMAL/VECTOR)。如果字符串不能解析为有效的数值，通常输出 0 或 (0,0,0,0) 向量。 [cite: 118]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要转换的字符串 (STRING 类型) 连接到 <code>String</code> 输入。 [cite: 118]</li>
+<li>[cite_start]从输出读取转换后的数值 (DECIMAL/VECTOR 类型)。 [cite: 118]</li>
+</ol>
+</li>
+</ul>
+<h3>9.9. <code>TO STRING</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将一个数值 (DECIMAL) 转换为字符串。 [cite: 119]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]Number: 要转换的数值 (DECIMAL)。 [cite: 119]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]转换后的字符串 (STRING)。 [cite: 119]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将要转换的数值 (DECIMAL 类型) 连接到 <code>Number</code> 输入。 [cite: 119]</li>
+<li>[cite_start]从输出读取转换后的字符串 (STRING 类型)。 [cite: 119]</li>
+</ol>
+</li>
+</ul>
+<h3>9.10. <code>TO ASCII</code> (字符转ASCII码)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将输入字符串的第一个字符转换为其对应的 ASCII (或Unicode) 数值。 [cite: 120]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>VALUE (NULL)</code> (黄色): 包含至少一个字符的字符串 (STRING)。 [cite: 120]</li>
+<li>[cite_start]<code>INDEX (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 指定字符串中要转换的字符的索引（从0开始）。如果未连接或为0，则转换第一个字符。 [cite: 120]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>ASCII (0.00)</code> (蓝色): <code>VALUE</code> 字符串中在 <code>INDEX</code> 位置的字符所对应的 ASCII (或Unicode) 数值 (DECIMAL)。如果字符串为空或索引越界，结果可能是0或错误。 [cite: 120]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将包含待转换字符的字符串 (STRING 类型) 连接到 <code>VALUE</code> 输入。 [cite: 120]</li>
+<li><a href="https://www.google.com/search?q=%E5%8F%AF%E9%80%89">cite_start</a> 将指定字符索引的数值 (DECIMAL 类型) 连接到 <code>INDEX</code> 输入。 [cite: 120]</li>
+<li>[cite_start]从 <code>ASCII</code> 输出读取字符的 ASCII (或Unicode) 码值 (DECIMAL 类型)。 [cite: 120]</li>
+</ol>
+</li>
+</ul>
+<h3>9.11. <code>FROM ASCII</code> (ASCII码转字符)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将输入的 ASCII (或Unicode) 数值转换为对应的字符，并输出为单个字符的字符串。 [cite: 121]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>ASCII (0.00)</code> (蓝色): 要转换为字符的 ASCII (或Unicode) 数值 (DECIMAL)。 [cite: 121]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>SYMBOL (NULL)</code> (黄色): 由输入的 <code>ASCII</code> 码值转换得到的单个字符组成的字符串 (STRING)。如果输入的数值无效，结果可能是空字符串或特定错误字符。 [cite: 121]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将代表字符的 ASCII (或Unicode) 码值 (DECIMAL 类型) 连接到 <code>ASCII</code> 输入。 [cite: 121]</li>
+<li>[cite_start]从 <code>SYMBOL</code> 输出读取转换后的单个字符字符串 (STRING 类型)。 [cite: 121]</li>
+</ol>
+</li>
+</ul>
+<h3>9.12. <code>FIND</code> (查找字符串)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 在一个主字符串中搜索指定的子字符串，并输出其首次出现的起始索引。如果未找到子字符串，则输出 -1。 [cite: 122]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>VALUE</code> (黄色): 要在其中进行搜索的主字符串 (STRING)。 [cite: 122]</li>
+<li>[cite_start]<code>TEXT TO FIND</code> (黄色): 需要在 VALUE 中查找的子字符串 (STRING)。 [cite: 122]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>INDEX</code> (蓝色): TEXT TO FIND 在 VALUE 中首次出现的从零开始的起始索引 (DECIMAL)。如果 TEXT TO FIND 未在 VALUE 中找到，则输出 -1。 [cite: 122]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要进行搜索的主字符串 (STRING 类型) 连接到 VALUE 输入端口。 [cite: 122]</li>
+<li>[cite_start]将要查找的子字符串 (STRING 类型) 连接到 TEXT TO FIND 输入端口。 [cite: 122]</li>
+<li>[cite_start]从 INDEX 输出端口读取查找到的子字符串的起始索引 (DECIMAL 类型)。 [cite: 122]</li>
+</ol>
+</li>
+</ul>
+<p><strong>例如</strong>：</p>
+<ul>
+<li>[cite_start]如果 VALUE 是 "Hello World" 且 TEXT TO FIND 是 "World"，则 INDEX 输出将为 6。 [cite: 122]</li>
+<li>[cite_start]如果 VALUE 是 "Hello World" 且 TEXT TO FIND 是 "earth"，则 INDEX 输出将为 -1。 [cite: 122]</li>
+<li>[cite_start]如果 VALUE 是 "banana" 且 TEXT TO FIND 是 "na", 则 INDEX 输出将为 2 (指向第一个 "na")。 [cite: 122]</li>
+<li>[cite_start]如果 TEXT TO FIND 为空字符串 ""，则 INDEX 输出将为 0。 [cite: 122]</li>
+</ul>
+<h2>10. 输入/传感器 (Input/Sensors)</h2>
+<p>[cite_start]获取游戏环境信息。 [cite: 122]</p>
+<h3>10.1. <code>Detector</code> (侦测器 - 外部部件)</h3>
+<ul>
+<li>[cite_start]<strong>注意</strong>： 侦测器本身不是芯片内的模块，而是游戏中的一个物理部件，但它提供可以连接到芯片的输出端口。 [cite: 123]</li>
+<li>[cite_start]<strong>功能</strong>: 检测与其连接的实体发生的碰撞。 [cite: 123]</li>
+<li><strong>输出端口</strong>:<ul>
+<li>[cite_start]ENTITY (ENTITY): 侦测器自身（或连接到侦测器的实体）。 [cite: 123]</li>
+<li>[cite_start]DIST (DECIMAL): 碰撞的距离。数值越小，碰撞越近 (可能为 0 或负数表示接触/穿透)。 [cite: 123]</li>
+<li>[cite_start]TRIGGER (DECIMAL): 触发信号。当发生碰撞时，输出 1；否则输出 0。 [cite: 123]</li>
+<li>[cite_start]HIT POINT (VECTOR): 碰撞点。一个二维向量，指示碰撞发生的具体世界坐标位置 (X, Y)。 [cite: 123]</li>
+<li>[cite_start]HIT NORMAL (VECTOR): 碰撞法线。一个二维向量，指示碰撞表面的方向 (X, Y)，通常指向远离碰撞表面的方向。 [cite: 123]</li>
+<li>[cite_start]HIT ENTITY (ENTITY): 与侦测器连接的实体发生碰撞的另一个实体。 [cite: 123]</li>
+<li>[cite_start]ACTIVATION (DECIMAL): 激活信号。通常持续输出 1，表示侦测器处于激活（可检测）状态。 [cite: 123]</li>
+</ul>
+</li>
+<li>[cite_start]<strong>使用方法</strong>: 将侦测器的相应输出端口连接到芯片模块的输入端口，以利用碰撞信息。 [cite: 123]</li>
+</ul>
+<h3>10.2. <code>TIME</code></h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 提供与游戏时间相关的数值。 [cite: 124]</li>
+<li>[cite_start]<strong>输入</strong>: 无 [cite: 124]</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]TIME (DECIMAL): 当前游戏自启动以来经过的总时间，通常以秒为单位。 [cite: 124]</li>
+<li>[cite_start]DELTA TIME (DECIMAL): 上一帧到当前帧的时间间隔（帧耗时），通常以秒为单位。对于需要平滑、帧率无关的运动或计时非常有用。 [cite: 124]</li>
+<li>[cite_start]SIN TIME (DECIMAL): <code>sin(TIME)</code>，当前游戏时间的正弦值，可用于创建周期性效果。 [cite: 124]</li>
+<li>[cite_start]COS TIME (DECIMAL): <code>cos(TIME)</code>，当前游戏时间的余弦值，可用于创建周期性效果。 [cite: 124]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将 <code>TIME</code> 输出连接到需要使用游戏总时间的地方。 [cite: 124]</li>
+<li>[cite_start]将 <code>DELTA TIME</code> 输出连接到需要进行帧率补偿的地方（例如，<code>速度 = 基准速度 * DELTA TIME</code>）。 [cite: 124]</li>
+<li>[cite_start]将 <code>SIN TIME</code> 和 <code>COS TIME</code> 输出用于创建周期性的运动、颜色变化等。 [cite: 124]</li>
+</ol>
+</li>
+</ul>
+<h2>11. 实用工具 (Utility)</h2>
+<p>[cite_start]辅助功能。 [cite: 124]</p>
+<h3>11.1. <code>Sticker</code> (标签/注释)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 在芯片编辑器画布上显示一段注释文本，用于标记、说明或组织芯片逻辑，不参与任何运算。 [cite: 125]</li>
+<li>[cite_start]<strong>输入</strong>: 无。 [cite: 125]</li>
+<li>[cite_start]<strong>输出</strong>: 无。 [cite: 125]</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]在芯片编辑器中添加 <code>Sticker</code> 模块。 [cite: 125]</li>
+<li>[cite_start]选中该模块，在属性面板中编辑其 "Header" (标题) 和 "Text" (内容) 字段来自定义显示的文本。 [cite: 125]</li>
+</ol>
+</li>
+</ul>
+<h3>11.2. <code>ACCUMULATOR</code> (累加器)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将输入的数值累加到一个内部总和上，并可以重置。 [cite: 126]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>NUMBER (0.00)</code> (蓝色): 每一帧（或每次触发，取决于具体实现）要加到累加值上的数值 (DECIMAL)。 [cite: 126]</li>
+<li>[cite_start]<code>RESET (0.00)</code> (蓝色): 重置信号 (DECIMAL)。当此输入为 1 时，累加器的总和将重置为 0（或其他初始值，通常为0）。 [cite: 126]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT (0.00)</code> (蓝色): 当前的累加总和 (DECIMAL)。 [cite: 126]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要累加的数值流 (DECIMAL 类型) 连接到 <code>NUMBER</code> 输入。 [cite: 126]</li>
+<li><a href="https://www.google.com/search?q=%E5%8F%AF%E9%80%89">cite_start</a> 连接一个重置信号 (DECIMAL 类型，1 为重置) 到 <code>RESET</code> 输入，以在需要时清零累加器。 [cite: 126]</li>
+<li>[cite_start]从 <code>RESULT</code> 输出读取当前的累加总和。 [cite: 126]</li>
+</ol>
+</li>
+</ul>
+<h3>11.3. <code>COUNTER</code> (计数器)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 根据增量和减量信号来增加或减少一个内部计数值，并可以重置。 [cite: 127]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>NUMBER (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89，可能用于设置初始值或直接设置计数值，具体取决于模块设计，但图片上未直接显示其典型用法，一般计数器不从此口输入计数值，而是通过增/减信号操作内部值。 可能性最大的用途是，如果不连接增减量，此端口可能作为直接设置值，或与复位后的初始值有关 )。 [cite: 127]</li>
+<li>[cite_start]<code>INCREMENT (0.00)</code> (蓝色): 增加信号 (DECIMAL)。当此输入为 1 时（通常是上升沿触发或持续为1时每帧增加），计数器的值增加1（或预设的步长）。 [cite: 127]</li>
+<li>[cite_start]<code>DECREMENT (0.00)</code> (蓝色): 减少信号 (DECIMAL)。当此输入为 1 时（触发方式同INCREMENT），计数器的值减少1（或预设的步长）。 [cite: 127]</li>
+<li>[cite_start]<code>RESET (0.00)</code> (蓝色): 重置信号 (DECIMAL)。当此输入为 1 时，计数器的值将重置为初始值（通常为 0）。 [cite: 127]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT (0.00)</code> (蓝色): 当前的计数值 (DECIMAL)。 [cite: 127]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]连接触发增加的信号 (DECIMAL 类型) 到 <code>INCREMENT</code> 输入。 [cite: 127]</li>
+<li>[cite_start]连接触发减少的信号 (DECIMAL 类型) 到 <code>DECREMENT</code> 输入。 [cite: 127]</li>
+<li><a href="https://www.google.com/search?q=%E5%8F%AF%E9%80%89">cite_start</a> 连接一个重置信号 (DECIMAL 类型，1 为重置) 到 <code>RESET</code> 输入。 [cite: 127]</li>
+<li>[cite_start]从 <code>RESULT</code> 输出读取当前的计数值。 [cite: 128]</li>
+</ol>
+</li>
+</ul>
+<h3>11.4. <code>DELAY</code> (延迟)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 将输入信号延迟指定的时间或帧数后输出。 [cite: 128]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>NUMBER (0.00)</code> (蓝色): 需要被延迟的输入数值 (DECIMAL)。 [cite: 128]</li>
+<li>[cite_start]<code>DELAY (0.00)</code> (蓝色): 延迟时间（单位通常是秒）或延迟帧数 (DECIMAL)。 [cite: 128]</li>
+<li>[cite_start]<code>ENABLE (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 启用信号 (DECIMAL)。当为 1 时，延迟功能工作；为 0 时，可能直接输出输入值或保持上一个延迟值，具体行为需测试。 [cite: 128]</li>
+<li>[cite_start]<code>RESET (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 重置信号 (DECIMAL)。当为 1 时，可能会清除延迟队列或将输出重置为某个初始状态。 [cite: 128]</li>
+<li>[cite_start]<code>HOLD (0.00)</code> (蓝色): (https://www.google.com/search?q=%E5%8F%AF%E9%80%89) 保持信号 (DECIMAL)。当为 1 时，可能会暂停延迟计时或保持当前输出值不变。 [cite: 128]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT (0.00)</code> (蓝色): 经过指定延迟后的 <code>NUMBER</code> 值 (DECIMAL)。 [cite: 128]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要延迟的数值信号 (DECIMAL 类型) 连接到 <code>NUMBER</code> 输入。 [cite: 128]</li>
+<li>[cite_start]将定义延迟长度的数值 (DECIMAL 类型) 连接到 <code>DELAY</code> 输入。 [cite: 129]</li>
+<li><a href="https://www.google.com/search?q=%E5%8F%AF%E9%80%89">cite_start</a> 使用 <code>ENABLE</code>, <code>RESET</code>, <code>HOLD</code> 端口来控制延迟模块的行为。 [cite: 129]</li>
+<li>[cite_start]从 <code>RESULT</code> 输出读取延迟后的信号。 [cite: 129]</li>
+</ol>
+</li>
+</ul>
+<h3>11.5. <code>DELTA PREVIOUS</code> (与上一帧差值)</h3>
+<ul>
+<li>[cite_start]<strong>功能</strong>: 计算当前帧的输入值与上一帧输入值之间的差值。 [cite: 130]</li>
+<li><strong>输入</strong>:<ul>
+<li>[cite_start]<code>INPUT (0.00)</code> (蓝色): 当前帧的输入数值 (DECIMAL)。 [cite: 130]</li>
+</ul>
+</li>
+<li><strong>输出</strong>:<ul>
+<li>[cite_start]<code>RESULT (0.00)</code> (蓝色): <code>当前帧INPUT值</code> - <code>上一帧INPUT值</code> (DECIMAL)。 [cite: 130]</li>
+</ul>
+</li>
+<li><strong>参数设置 (下拉框)</strong>:<ul>
+<li>[cite_start]<code>DECIMAL</code>: 指示输入和输出是数值类型。 [cite: 130]</li>
+</ul>
+</li>
+<li><strong>使用方法</strong>:<ol>
+<li>[cite_start]将需要计算帧间差值的数值信号 (DECIMAL 类型) 连接到 <code>INPUT</code> 输入。 [cite: 130]</li>
+<li>[cite_start]从 <code>RESULT</code> 输出读取当前帧输入值与上一帧输入值的差。第一帧的差值通常为0或输入值本身。 [cite: 130]</li>
+</ol>
+</li>
+</ul>
+<h2>12. 其他重要信息</h2>
+<h3>12.1. 数据类型与端口颜色</h3>
+<ul>
+<li>[cite_start]<strong>ERROR （红色）</strong>： 错误类型，表示连接或配置存在问题。 [cite: 131]</li>
+<li>[cite_start]<strong>DECIMAL （蓝色）</strong>： 数值类型，可以是整数或浮点数。 [cite: 131]</li>
+<li>[cite_start]<strong>VECTOR （绿色）</strong>： 四维向量类型 (X, Y, Z, W)，用于表示位置、方向、速度、颜色 (RGBA) 等。即使在 2D 游戏中，通常也使用四维向量，Z 和 W 分量可能未使用或有特定含义。 [cite: 131]</li>
+<li>[cite_start]<strong>STRING （黄色）</strong>： 字符串类型，用于处理文本信息。 [cite: 131]</li>
+<li>[cite_start]<strong>ENTITY （紫色）</strong>： 实体类型，代表游戏世界中的一个具体物体（角色、道具、方块等）。 [cite: 131]</li>
+</ul>
+<h3>12.2. ENTITY 类型使用要点</h3>
+<ul>
+<li>[cite_start]<strong>是什么</strong>： <code>ENTITY</code> 是一种数据类型，可以看作是指向游戏中某个物体的“遥控器”或引用。 [cite: 132]</li>
+<li><strong>如何获取</strong>：<ol>
+<li>[cite_start]<strong>芯片参数</strong>： 在芯片编辑器中添加 <code>ENTITY</code> 类型的参数（例如，命名为 <code>TargetEntity</code>）。然后在游戏中选中芯片，通过属性面板将游戏世界中的一个实体连接到这个参数端口。 [cite: 132]</li>
+<li>[cite_start]<strong>模块输出</strong>： 某些模块（如 <code>Detector</code> 的 <code>HIT ENTITY</code> 端口）可以直接输出 <code>ENTITY</code> 类型的数据。 [cite: 132]</li>
+</ol>
+</li>
+<li>[cite_start]<strong>如何使用</strong>： 将获取到的 <code>ENTITY</code> 数据连接到各种实体操作模块（如 <code>Position</code>, <code>Velocity</code>, <code>add FORCE</code>, <code>delete</code> 等）的 <code>Entity</code> 输入端口，以读取该实体的属性或对其施加影响。 [cite: 132]</li>
+</ul>
+<h3>12.3. 节点框颜色（芯片编辑器内）</h3>
+<ul>
+<li>[cite_start]<strong>DEFAULT （白色）</strong>： 默认状态，表示节点正常。 [cite: 133]</li>
+<li>[cite_start]<strong>WARNING （黄色）</strong>： 警告状态，可能表示存在潜在问题（例如，类型不完全匹配但可转换），通常不影响运行。 [cite: 133]</li>
+<li>[cite_start]<strong>ERROR （红色）</strong>： 错误状态，表示存在严重错误（例如，类型完全不匹配、缺少输入），可能导致芯片无法正常工作。 [cite: 133]</li>
+<li>[cite_start]<strong>重要</strong>： 芯片的连接 <strong>不能</strong>构成循环 （即一个模块的输出不能直接或间接地连接回自身的任何输入端口）。编辑器通常会检测并阻止或报错。 [cite: 133]</li>
+</ul>
+<h2>13. 结语</h2>
+<hr />
+<p>以上就是本芯片模块指南的主要内容。
+掌握这些模块的关键在于实践， <strong>甜瓜联合科技</strong> 鼓励您现在就动手尝试！
+遇到问题或想分享创意？欢迎加入 <strong>QQ 交流群：223577168</strong> ，与大家一起交流进步。
+<em>本指南内容基于《甜瓜游乐场》v27.5 编写。</em>
+祝您在芯片世界中创造无限乐趣！
+[cite_start]—— <strong>甜瓜联合科技</strong> 敬上 [cite: 133]</p>
+    </div>
+{% endblock %}
+
+{# 这个 block 里的内容，会添加到 base.html 的 <body> 标签末尾，用于放置此页面专属的JS #}
+{% block scripts_extra %}
+    <script>
+        // 您的JavaScript代码在这里
+        console.log("芯片模块指南页面加载完成！");
+    </script>
+{% endblock %}

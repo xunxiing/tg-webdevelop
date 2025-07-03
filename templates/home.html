@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <header class="home-hero">
+        <h1>欢迎使用 MSUT 芯片工具平台</h1>
+        <p class="subtitle">一个集成了AI辅助设计、可视化与文档的综合性芯片逻辑探索工具集。</p>
+    </header>
+
+    <main class="card-container">
+        <a href="{{ url_for('generator') }}" class="feature-card-nav">
+            <div class="card-icon">
+                <span class="material-icons">memory</span>
+            </div>
+            <div class="card-content">
+                <h3>AI 芯片逻辑图生成器</h3>
+                <p>通过自然语言或JSON，快速生成、编辑和可视化芯片逻辑图。支持AI辅助、手动编辑和图片导出。</p>
+            </div>
+            <div class="card-arrow">
+                <span class="material-icons">arrow_forward</span>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('tutorial') }}" class="feature-card-nav">
+            <div class="card-icon">
+                <span class="material-icons">description</span>
+            </div>
+            <div class="card-content">
+                <h3>芯片JSON教程</h3>
+                <p>学习如何编写用于本平台可视化工具的JSON，包含详细的节点和边结构说明及示例。</p>
+            </div>
+            <div class="card-arrow">
+                <span class="material-icons">school</span> <!-- 换个更贴切的图标 -->
+            </div>
+        </a>
+        
+        <a href="#" class="feature-card-nav card-disabled">
+            <div class="card-icon">
+                <span class="material-icons">description</span>
+            </div>
+            <div class="card-content">
+                <h3>交互式技术文档</h3>
+                <p>（即将推出）浏览和学习与芯片设计相关的技术文档、教程和案例分析。</p>
+            </div>
+            <div class="card-arrow">
+                <span class="material-icons">hourglass_empty</span>
+            </div>
+        </a>
+
+        <a href="#" class="feature-card-nav card-disabled">
+            <div class="card-icon">
+                <span class="material-icons">build</span>
+            </div>
+            <div class="card-content">
+                <h3>更多工具</h3>
+                <p>（敬请期待）我们正在规划更多实用的开发和设计辅助工具。</p>
+            </div>
+             <div class="card-arrow">
+                <span class="material-icons">more_horiz</span>
+            </div>
+        </a>
+    </main>
+    
+    <footer class="home-footer">
+        <p>© 2024-2025 <span class="org-name">甜瓜联合科技 (MSUT)</span>. 总访问量: <span class="org-name">{{ visit_count }}</span> 次. QQ群: 223577168</p>
+    </footer>
+</div>
+{% endblock %}
